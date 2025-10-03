@@ -7,16 +7,18 @@ export interface HeaderProps {
   right?: ReactNode[];
 }
 
-export const Header: FC<HeaderProps> = ({ left, center, right }) => {
+export const Footer: FC<HeaderProps> = ({ left, center, right }) => {
   return (
     <AppBar
       position="fixed"
       enableColorOnDark
       color="secondary"
       sx={{
+        top: "auto",
+        bottom: 0,
         borderRadius: 4,
-        margin: 1.5,
         height: 64,
+        margin: 1.5,
         width: `calc(100% - 24px)`, // 2*margin (2 * 12px = 12px * 2 sides = 24px)
       }}
     >
