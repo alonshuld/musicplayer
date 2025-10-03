@@ -1,11 +1,34 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useState } from "react";
 import { Header } from "./components/common/Header";
 import { Logo } from "./components/common/Logo";
 import { Footer } from "./components/common/Footer";
+import { QueueBtn } from "./components/common/QueueBtn";
 
 import "./App.css";
 
 const theme = createTheme({
+  components: {
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          "&:focus": {
+            outline: "none",
+          },
+          transition: "transform 0.2s ease, background-color 0.2s ease",
+          "&:hover": {
+            transform: "scale(1.05)",
+          },
+          "&:active": {
+            transform: "scale(0.9)",
+          },
+        },
+      },
+      defaultProps: {
+        disableRipple: true, // turn off ripple globally for IconButton
+      },
+    },
+  },
   palette: {
     mode: "dark",
     secondary: {
@@ -26,6 +49,8 @@ const theme = createTheme({
 });
 
 function App() {
+  const [showQueue, setShowQueue] = useState(false);
+
   return (
     <ThemeProvider theme={theme}>
       <Header
@@ -34,7 +59,10 @@ function App() {
         right={[<div>admin button</div>]}
       />
       <Footer
-        left={[<div>queue</div>, <div>playing now</div>]}
+        left={[
+          <QueueBtn showQueue={showQueue} setShowQueue={setShowQueue} />,
+          <div>playing now</div>,
+        ]}
         center={[<span>[ || ]</span>, <div>---------------</div>]}
         right={[<div>volume</div>, <div>shuffle</div>, <div>repeat</div>]}
       />
