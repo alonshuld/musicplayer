@@ -23,7 +23,11 @@ const theme = createTheme({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Header items={[<Logo />]} />
+      <Header
+        left={[<Logo />]}
+        center={[<div>searchbar</div>]}
+        right={[<div>admin button</div>]}
+      />
     </ThemeProvider>
   );
 }
