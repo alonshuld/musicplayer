@@ -1,7 +1,7 @@
 import { type FC, type ReactNode } from "react";
 import { AppBar, Toolbar, Box } from "@mui/material";
 
-interface HeaderProps {
+export interface HeaderProps {
   left?: ReactNode[];
   center?: ReactNode[];
   right?: ReactNode[];
@@ -31,6 +31,7 @@ export const Header: FC<HeaderProps> = ({ left, center, right }) => {
             display: "flex",
             gap: 2,
             alignItems: "center",
+            flexDirection: "column",
           }}
         >
           {center}
