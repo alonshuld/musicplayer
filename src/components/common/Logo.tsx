@@ -10,6 +10,16 @@ export const Logo: FC = () => {
       alignItems="center"
       padding="0"
       maxHeight={48}
+      sx={(theme) => ({
+        cursor: "pointer",
+        transition: "filter 0.3s ease",
+        "&:hover": {
+          filter: `drop-shadow(0 0 2em ${theme.palette.primary.main}aa)`,
+        },
+        "&.react:hover": {
+          filter: `drop-shadow(0 0 2em ${theme.palette.secondary.main}aa)`,
+        },
+      })}
     >
       <Album sx={{ fontSize: "3rem", margin: 0 }} color="primary" />
       <Typography variant="h1" color="primary" sx={{ userSelect: "none" }}>
