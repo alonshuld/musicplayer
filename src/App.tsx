@@ -1,6 +1,6 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { Header } from "./components/common/Header";
 import { Logo } from "./components/common/Logo";
 import { Footer } from "./components/common/Footer";
@@ -8,6 +8,7 @@ import { QueueBtn } from "./components/common/QueueBtn";
 import { QueueDrawer } from "./components/common/QueueDrawer";
 
 import "./App.css";
+import { SongCover } from "./components/common/SongCover";
 
 const theme = createTheme({
   components: {
@@ -33,6 +34,10 @@ const theme = createTheme({
   },
   palette: {
     mode: "dark",
+    background: {
+      default: "#0d0d0d", // darker main background
+      paper: "#1a1a1a", // slightly lighter for cards/panels
+    },
     secondary: {
       main: "#2d2d2d",
       contrastText: "#ffffff",
@@ -83,16 +88,22 @@ function App() {
           />
 
           <Box className="content" gap={1.5}>
-            <Typography variant="h1">test test test</Typography>
-            <Typography variant="h1">test test test</Typography>
-            <Typography variant="h1">test test test</Typography>
+            <SongCover
+              coverUrl="https://upload.wikimedia.org/wikipedia/he/a/ad/%D7%A8%D7%93%D7%99%D7%95_%D7%A9%D7%98%D7%97_3.png"
+              songName="פרופיל 97"
+              producer="פאר טסי"
+            ></SongCover>
           </Box>
         </Box>
 
         <Footer
           left={[
             <QueueBtn showQueue={showQueue} setShowQueue={setShowQueue} />,
-            <div>playing now</div>,
+            <SongCover
+              coverUrl="https://upload.wikimedia.org/wikipedia/he/a/ad/%D7%A8%D7%93%D7%99%D7%95_%D7%A9%D7%98%D7%97_3.png"
+              songName="פרופיל 97"
+              producer="פאר טסי"
+            ></SongCover>,
           ]}
           center={[<span>[ || ]</span>, <div>---------------</div>]}
           right={[<div>volume</div>, <div>shuffle</div>, <div>repeat</div>]}
