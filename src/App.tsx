@@ -1,9 +1,11 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
+import { Box, Typography } from "@mui/material";
 import { Header } from "./components/common/Header";
 import { Logo } from "./components/common/Logo";
 import { Footer } from "./components/common/Footer";
 import { QueueBtn } from "./components/common/QueueBtn";
+import { QueueDrawer } from "./components/common/QueueDrawer";
 
 import "./App.css";
 
@@ -25,15 +27,15 @@ const theme = createTheme({
         },
       },
       defaultProps: {
-        disableRipple: true, // turn off ripple globally for IconButton
+        disableRipple: true,
       },
     },
   },
   palette: {
     mode: "dark",
     secondary: {
-      main: "#2d2d2d", // this is the one used when you do color="secondary"
-      contrastText: "#ffffff", // make sure text is readable
+      main: "#2d2d2d",
+      contrastText: "#ffffff",
     },
   },
   typography: {
@@ -53,19 +55,49 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Header
-        left={[<Logo />]}
-        center={[<div>searchbar</div>]}
-        right={[<div>admin button</div>]}
-      />
-      <Footer
-        left={[
-          <QueueBtn showQueue={showQueue} setShowQueue={setShowQueue} />,
-          <div>playing now</div>,
-        ]}
-        center={[<span>[ || ]</span>, <div>---------------</div>]}
-        right={[<div>volume</div>, <div>shuffle</div>, <div>repeat</div>]}
-      />
+      <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+        <Header
+          left={[<Logo />]}
+          center={[<div>searchbar</div>]}
+          right={[<div>admin button</div>]}
+        />
+
+        <Box
+          className="main"
+          my={11}
+          mx={1.5}
+          sx={{
+            display: "flex",
+            flexGrow: 1,
+            gap: showQueue ? 1.5 : 0,
+          }}
+        >
+          <QueueDrawer
+            showQueue={showQueue}
+            setShowQueue={setShowQueue}
+            items={[
+              <div key={1}>song1</div>,
+              <div key={2}>song2</div>,
+              <div key={3}>song3</div>,
+            ]}
+          />
+
+          <Box className="content" gap={1.5}>
+            <Typography variant="h1">test test test</Typography>
+            <Typography variant="h1">test test test</Typography>
+            <Typography variant="h1">test test test</Typography>
+          </Box>
+        </Box>
+
+        <Footer
+          left={[
+            <QueueBtn showQueue={showQueue} setShowQueue={setShowQueue} />,
+            <div>playing now</div>,
+          ]}
+          center={[<span>[ || ]</span>, <div>---------------</div>]}
+          right={[<div>volume</div>, <div>shuffle</div>, <div>repeat</div>]}
+        />
+      </Box>
     </ThemeProvider>
   );
 }
