@@ -1,73 +1,71 @@
-# React + TypeScript + Vite
+# 🎵 Music Player
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern music player built with **Vite**, **React**, **TypeScript**, and **Material UI**, using **React Query** for data fetching and caching.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## React Compiler
+- 🎧 Play and pause songs from a local JSON database
+- ⚡ Fast and lightweight setup with Vite
+- 🎨 Styled with Material UI components
+- 🔄 Data fetching and caching via React Query
+- 🧩 Modular TypeScript code structure for scalability
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Frontend:** React, TypeScript, Vite
+- **UI Library:** Material UI
+- **Data Management:** React Query
+- **Backend (Mock API):** JSON Server
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## ⚙️ Installation & Setup
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1. Clone the Repository
+```bash
+git clone https://github.com/alonshuld/musicplayer.git
+cd musicplayer
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 2. Clone the Repository
+```bash
+npm install
 ```
+
+### 3. Run the Backend
+```bash
+json-server ./backend/db.json --watch --port 3001
+```
+
+### 4. Start the Frontend
+```bash
+npm run dev
+```
+
+The app will be available at http://localhost:5173.
+
+---
+
+## 📁 Project Structure
+```bash
+musicplayer/
+├── backend/
+│   └── db.json           # Mock database
+├── src/
+│   ├── components/       # UI components
+│   ├── pages/            # Main views
+│   └── ...
+└── vite.config.ts
+```
+
+## 🧑‍💻 Development Notes
+
+The app uses a mock backend served via JSON Server.
+
+React Query automatically handles caching and refetching.
+
+Material UI provides consistent and responsive styling.
