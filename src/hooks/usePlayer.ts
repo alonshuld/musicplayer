@@ -32,9 +32,11 @@ export const usePlayer = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const progressInterval = useRef<number | null>(null);
 
+  const { current, isPlaying, volume } = state;
+
   // Play or change song
   useEffect(() => {
-    if (!state.current) return;
+    if (!current) return;
 
     // Stop previous audio
     if (audioRef.current) {
@@ -43,8 +45,8 @@ export const usePlayer = () => {
     }
 
     // Create new audio
-    audioRef.current = new Audio(state.current.sound);
-    audioRef.current.volume = state.volume;
+    audioRef.current = new Audio(current.sound);
+    audioRef.current.volume = volume;
 
     // When metadata loads, update duration
     audioRef.current.onloadedmetadata = () => {
@@ -52,7 +54,7 @@ export const usePlayer = () => {
     };
 
     // Start playback if isPlaying
-    if (state.isPlaying) {
+    if (isPlaying) {
       audioRef.current.play().catch((err) => console.error(err));
     }
 
@@ -68,7 +70,7 @@ export const usePlayer = () => {
       if (audioRef.current) audioRef.current.pause();
       if (progressInterval.current) clearInterval(progressInterval.current);
     };
-  }, [state.current]);
+  }, [current, isPlaying, volume]);
 
   // Toggle play/pause
   const togglePlay = useCallback(() => {
@@ -81,13 +83,24 @@ export const usePlayer = () => {
 
   // Play a song immediately
   const play = useCallback((song: Song) => {
-    setState((prev) => ({
+  setState((prev) => {
+    // If the same song is clicked, reset progress
+    const isSameSong = prev.current?.id === song.id;
+    return {
       ...prev,
       current: song,
       isPlaying: true,
-      progress: 0,
-    }));
-  }, []);
+      progress: isSameSong ? 0 : prev.progress,
+    };
+  });
+
+  // Restart the audio manually
+  if (audioRef.current) {
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+    audioRef.current.play().catch((err) => console.error(err));
+  }
+}, []);
 
   // Next song
   const next = useCallback(() => {
