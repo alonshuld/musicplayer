@@ -1,33 +1,16 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import React, { useState } from "react";
-import { Box, Button } from "@mui/material";
+import { useState } from "react";
+import { Box, CircularProgress } from "@mui/material";
 import { Header } from "./components/common/Header";
 import { Logo } from "./components/common/Logo";
 import { Footer } from "./components/common/Footer";
 import { QueueBtn } from "./components/common/QueueBtn";
 import { QueueDrawer } from "./components/common/QueueDrawer";
-import { SongCover, type SongCoverProps } from "./components/common/SongCover";
-import Cover1 from "./assets/1.png";
+import { SongCover } from "./components/common/SongCover";
+import { Error } from "./components/common/Error";
+import { useSongs, type Song } from "./SongsFetcher";
 
 import "./App.css";
-
-const tempSong: SongCoverProps = {
-  coverUrl: Cover1,
-  songName: "פרופיל 97",
-  artist: "פאר טסי",
-};
-
-const songsAmount = 25;
-const allSongs: React.ReactNode[] = [];
-for (let i = 0; i < songsAmount; i++) {
-  allSongs.push(
-    <SongCover
-      key={i}
-      {...tempSong}
-      buttons={[<Button>play</Button>, <Button>add to queue</Button>]}
-    />
-  );
-}
 
 const theme = createTheme({
   components: {
@@ -76,6 +59,7 @@ const theme = createTheme({
 
 function App() {
   const [showQueue, setShowQueue] = useState(false);
+  const { data: songs, isLoading, error } = useSongs();
 
   return (
     <ThemeProvider theme={theme}>
@@ -100,20 +84,7 @@ function App() {
           <QueueDrawer
             showQueue={showQueue}
             setShowQueue={setShowQueue}
-            items={[
-              <SongCover
-                {...tempSong}
-                buttons={[<Button>D</Button>]}
-              ></SongCover>,
-              <SongCover
-                {...tempSong}
-                buttons={[<Button>D</Button>]}
-              ></SongCover>,
-              <SongCover
-                {...tempSong}
-                buttons={[<Button>D</Button>]}
-              ></SongCover>,
-            ]}
+            items={[]}
           />
 
           <Box
@@ -124,20 +95,32 @@ function App() {
               flexWrap: "wrap",
               justifyContent: "center",
               overflowY: "auto",
-              alignContent: "flex-start",
+              alignContent: songs ? "flex-start" : "center",
               width: "100%",
               scrollbarWidth: "none", // Firefox
               "&::-webkit-scrollbar": { display: "none" }, // Chrome/Safari
             }}
           >
-            {allSongs}
+            {isLoading ? (
+              <CircularProgress />
+            ) : error ? (
+              <Error message={error.message} />
+            ) : (
+              songs?.map((song: Song) => (
+                <SongCover
+                  key={song.id}
+                  songName={song.name}
+                  artist={song.artist}
+                  cover={song.cover}
+                />
+              ))
+            )}
           </Box>
         </Box>
 
         <Footer
           left={[
             <QueueBtn showQueue={showQueue} setShowQueue={setShowQueue} />,
-            <SongCover {...tempSong}></SongCover>,
           ]}
           center={[<span>[ || ]</span>, <div>---------------</div>]}
           right={[<div>volume</div>, <div>shuffle</div>, <div>repeat</div>]}
