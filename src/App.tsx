@@ -1,12 +1,13 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { Header } from "./components/common/Header";
 import { Logo } from "./components/common/Logo";
 import { Footer } from "./components/common/Footer";
 import { QueueBtn } from "./components/common/QueueBtn";
 import { QueueDrawer } from "./components/common/QueueDrawer";
 import { SongCover } from "./components/common/SongCover";
+import { Error } from "./components/common/Error";
 import { useSongs, type Song } from "./SongsFetcher";
 
 import "./App.css";
@@ -94,20 +95,26 @@ function App() {
               flexWrap: "wrap",
               justifyContent: "center",
               overflowY: "auto",
-              alignContent: "flex-start",
+              alignContent: songs ? "flex-start" : "center",
               width: "100%",
               scrollbarWidth: "none", // Firefox
               "&::-webkit-scrollbar": { display: "none" }, // Chrome/Safari
             }}
           >
-            {songs?.map((song: Song) => (
-              <SongCover
-                key={song.id}
-                songName={song.name}
-                artist={song.artist}
-                cover={song.cover}
-              />
-            ))}
+            {isLoading ? (
+              <CircularProgress />
+            ) : error ? (
+              <Error message={error.message} />
+            ) : (
+              songs?.map((song: Song) => (
+                <SongCover
+                  key={song.id}
+                  songName={song.name}
+                  artist={song.artist}
+                  cover={song.cover}
+                />
+              ))
+            )}
           </Box>
         </Box>
 
