@@ -38,6 +38,8 @@ export const QueueDrawer: FC<QueueDrawerProps> = ({
           width: QueueDrawerWidth,
           position: "relative",
           border: "none",
+          scrollbarWidth: "none", // Firefox
+          "&::-webkit-scrollbar": { display: "none" }, // Chrome/Safari
         },
       }}
     >
