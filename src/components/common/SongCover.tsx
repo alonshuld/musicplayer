@@ -2,14 +2,14 @@ import { Box, Typography } from "@mui/material";
 import { useState, useEffect, useRef } from "react";
 
 export interface SongCoverProps {
-  coverUrl: string;
+  cover: string;
   songName: string;
   artist: string;
   buttons?: React.ReactNode[];
 }
 
 export const SongCover: React.FC<SongCoverProps> = ({
-  coverUrl,
+  cover,
   songName,
   artist,
   buttons = [],
@@ -50,7 +50,7 @@ export const SongCover: React.FC<SongCoverProps> = ({
       {/* Cover image */}
       <Box sx={{ position: "relative", flexShrink: 0 }}>
         <img
-          src={coverUrl}
+          src={cover}
           alt={songName}
           style={{
             width: layout === "compact" ? 48 : "100%",
