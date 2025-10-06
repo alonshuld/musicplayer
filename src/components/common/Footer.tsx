@@ -23,7 +23,16 @@ export const Footer: FC<HeaderProps> = ({ left, center, right }) => {
       }}
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between", px: 3 }}>
-        <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>{left}</Box>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          {left}
+        </Box>
         <Box
           sx={{
             position: "absolute",
@@ -38,7 +47,9 @@ export const Footer: FC<HeaderProps> = ({ left, center, right }) => {
         >
           {center}
         </Box>
-        <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+        <Box
+          sx={{ display: "flex", gap: 2, alignItems: "center", height: "100%" }}
+        >
           {right}
         </Box>
       </Toolbar>
