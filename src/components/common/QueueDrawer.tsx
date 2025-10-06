@@ -7,7 +7,7 @@ export interface QueueDrawerProps {
   items?: ReactNode[];
 }
 
-const QueueDrawerWidth = 300;
+const QueueDrawerWidth = 240;
 
 export const QueueDrawer: FC<QueueDrawerProps> = ({
   items,
@@ -41,9 +41,19 @@ export const QueueDrawer: FC<QueueDrawerProps> = ({
         },
       }}
     >
-      <Box sx={{ display: "flex", flexDirection: "column", m: 2, gap: 2 }}>
-        {items}
-      </Box>
+      {items?.map((item) => (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            px: 2,
+            pt: 2,
+            height: 64,
+          }}
+        >
+          {item}
+        </Box>
+      ))}
     </Drawer>
   );
 };
