@@ -1,14 +1,33 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useState } from "react";
-import { Box } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Button } from "@mui/material";
 import { Header } from "./components/common/Header";
 import { Logo } from "./components/common/Logo";
 import { Footer } from "./components/common/Footer";
 import { QueueBtn } from "./components/common/QueueBtn";
 import { QueueDrawer } from "./components/common/QueueDrawer";
+import { SongCover, type SongCoverProps } from "./components/common/SongCover";
+import Cover1 from "./assets/1.png";
 
 import "./App.css";
-import { SongCover } from "./components/common/SongCover";
+
+const tempSong: SongCoverProps = {
+  coverUrl: Cover1,
+  songName: "פרופיל 97",
+  artist: "פאר טסי",
+};
+
+const songsAmount = 25;
+const allSongs: React.ReactNode[] = [];
+for (let i = 0; i < songsAmount; i++) {
+  allSongs.push(
+    <SongCover
+      key={i}
+      {...tempSong}
+      buttons={[<Button>play</Button>, <Button>add to queue</Button>]}
+    />
+  );
+}
 
 const theme = createTheme({
   components: {
@@ -60,7 +79,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
         <Header
           left={[<Logo />]}
           center={[<div>searchbar</div>]}
@@ -75,35 +94,50 @@ function App() {
             display: "flex",
             flexGrow: 1,
             gap: showQueue ? 1.5 : 0,
+            overflow: "hidden",
           }}
         >
           <QueueDrawer
             showQueue={showQueue}
             setShowQueue={setShowQueue}
             items={[
-              <div key={1}>song1</div>,
-              <div key={2}>song2</div>,
-              <div key={3}>song3</div>,
+              <SongCover
+                {...tempSong}
+                buttons={[<Button>D</Button>]}
+              ></SongCover>,
+              <SongCover
+                {...tempSong}
+                buttons={[<Button>D</Button>]}
+              ></SongCover>,
+              <SongCover
+                {...tempSong}
+                buttons={[<Button>D</Button>]}
+              ></SongCover>,
             ]}
           />
 
-          <Box className="content" gap={1.5}>
-            <SongCover
-              coverUrl="https://upload.wikimedia.org/wikipedia/he/a/ad/%D7%A8%D7%93%D7%99%D7%95_%D7%A9%D7%98%D7%97_3.png"
-              songName="פרופיל 97"
-              producer="פאר טסי"
-            ></SongCover>
+          <Box
+            className="content"
+            gap={2}
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              overflowY: "auto",
+              alignContent: "flex-start",
+              width: "100%",
+              scrollbarWidth: "none", // Firefox
+              "&::-webkit-scrollbar": { display: "none" }, // Chrome/Safari
+            }}
+          >
+            {allSongs}
           </Box>
         </Box>
 
         <Footer
           left={[
             <QueueBtn showQueue={showQueue} setShowQueue={setShowQueue} />,
-            <SongCover
-              coverUrl="https://upload.wikimedia.org/wikipedia/he/a/ad/%D7%A8%D7%93%D7%99%D7%95_%D7%A9%D7%98%D7%97_3.png"
-              songName="פרופיל 97"
-              producer="פאר טסי"
-            ></SongCover>,
+            <SongCover {...tempSong}></SongCover>,
           ]}
           center={[<span>[ || ]</span>, <div>---------------</div>]}
           right={[<div>volume</div>, <div>shuffle</div>, <div>repeat</div>]}

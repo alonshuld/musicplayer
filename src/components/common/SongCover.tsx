@@ -1,88 +1,100 @@
-import { type FC } from "react";
-import {
-  Card,
-  CardMedia,
-  CardContent,
-  Typography,
-  useTheme,
-  useMediaQuery,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import { useState, useEffect, useRef } from "react";
 
-interface SongCoverProps {
+export interface SongCoverProps {
   coverUrl: string;
   songName: string;
-  producer: string;
-  height?: number; // optional explicit height
+  artist: string;
+  buttons?: React.ReactNode[];
 }
 
-export const SongCover: FC<SongCoverProps> = ({
+export const SongCover: React.FC<SongCoverProps> = ({
   coverUrl,
   songName,
-  producer,
-  height,
+  artist,
+  buttons = [],
 }) => {
-  const theme = useTheme();
-  const isSmall = useMediaQuery(theme.breakpoints.down("sm")); // for responsive layout
+  const [hovered, setHovered] = useState(false);
+  const [layout, setLayout] = useState<"full" | "compact">("full");
+  const ref = useRef<HTMLDivElement>(null);
 
-  // Decide if we show text or not (for very small heights, like footer)
-  const showText = !height || height >= 64;
+  useEffect(() => {
+    if (!ref.current?.parentElement) return;
+    const parent = ref.current.parentElement;
+    const observer = new ResizeObserver((entries) => {
+      const height = entries[0].contentRect.height;
+      setLayout(height < 100 ? "compact" : "full");
+    });
+    observer.observe(parent);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <Card
+    <Box
+      ref={ref}
       sx={{
         display: "flex",
-        flexDirection: isSmall ? "column" : "row",
-        alignItems: "center",
+        flexDirection: layout === "compact" ? "row" : "column",
+        alignItems: layout === "compact" ? "center" : "flex-start",
+        gap: layout === "compact" ? 1 : 0.5,
+        position: "relative",
+        width: layout === "compact" ? 200 : 160,
+        padding: 0.5,
+        height: layout === "compact" ? "auto" : 210,
         borderRadius: 2,
-        padding: "4px",
-        boxSizing: "border-box",
-        bgcolor: "background.paper",
-        height: height ?? "auto",
-        width: height ?? "auto",
-        minWidth: 64,
+        backgroundColor: (theme) => theme.palette.secondary.main,
       }}
-      elevation={3}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
-      <CardMedia
-        component="img"
-        image={coverUrl}
-        alt={songName}
-        sx={{
-          width: isSmall ? "100%" : height ?? 64,
-          height: height ?? 64,
-          borderRadius: 1,
-          objectFit: "cover",
-        }}
-      />
-
-      {showText && (
-        <CardContent
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: isSmall ? "center" : "flex-start",
-            padding: "4px",
-            minWidth: 0,
+      {/* Cover image */}
+      <Box sx={{ position: "relative", flexShrink: 0 }}>
+        <img
+          src={coverUrl}
+          alt={songName}
+          style={{
+            width: layout === "compact" ? 48 : "100%",
+            height: layout === "compact" ? 48 : 160,
+            objectFit: "cover",
+            borderRadius: 8,
+            display: "block",
           }}
-        >
-          <Typography
-            variant="subtitle2"
-            noWrap
-            sx={{ fontSize: height && height < 120 ? "0.7rem" : undefined }}
+        />
+        {hovered && buttons.length > 0 && (
+          <Box
+            sx={{
+              position: "absolute",
+              inset: 0,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 1,
+              backgroundColor: "rgba(0,0,0,0.4)",
+              borderRadius: 2,
+              transition: "opacity 0.2s ease",
+            }}
           >
-            {songName}
-          </Typography>
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            noWrap
-            sx={{ fontSize: height && height < 120 ? "0.6rem" : undefined }}
-          >
-            {producer}
-          </Typography>
-        </CardContent>
-      )}
-    </Card>
+            {buttons}
+          </Box>
+        )}
+      </Box>
+
+      {/* Song info */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          width: layout === "compact" ? 150 : 165,
+        }}
+      >
+        <Typography variant="subtitle1" color="text.primary" noWrap>
+          {songName}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" noWrap>
+          {artist}
+        </Typography>
+      </Box>
+    </Box>
   );
 };
