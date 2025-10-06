@@ -7,7 +7,7 @@ export interface QueueDrawerProps {
   items?: ReactNode[];
 }
 
-export const QueueDrawerWidth = 300;
+const QueueDrawerWidth = 240;
 
 export const QueueDrawer: FC<QueueDrawerProps> = ({
   items,
@@ -24,28 +24,38 @@ export const QueueDrawer: FC<QueueDrawerProps> = ({
         paper: {
           sx: {
             width: QueueDrawerWidth,
-            position: "relative",
+            position: "fix",
             borderRadius: "16px",
-            overflow: "auto",
+            zIndex: 0,
           },
         },
       }}
       sx={{
         width: showQueue ? QueueDrawerWidth : 0,
         flexShrink: 0,
-        height: "100%",
         transition: "width 0.2s ease",
         "& .MuiDrawer-paper": {
           width: QueueDrawerWidth,
-          height: "100%",
           position: "relative",
           border: "none",
+          scrollbarWidth: "none", // Firefox
+          "&::-webkit-scrollbar": { display: "none" }, // Chrome/Safari
         },
       }}
     >
-      <Box sx={{ display: "flex", flexDirection: "column", m: 2, gap: 2 }}>
-        {items}
-      </Box>
+      {items?.map((item) => (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            px: 2,
+            pt: 2,
+            height: 64,
+          }}
+        >
+          {item}
+        </Box>
+      ))}
     </Drawer>
   );
 };

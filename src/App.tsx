@@ -1,13 +1,33 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useState } from "react";
-import { Box, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Button } from "@mui/material";
 import { Header } from "./components/common/Header";
 import { Logo } from "./components/common/Logo";
 import { Footer } from "./components/common/Footer";
 import { QueueBtn } from "./components/common/QueueBtn";
 import { QueueDrawer } from "./components/common/QueueDrawer";
+import { SongCover, type SongCoverProps } from "./components/common/SongCover";
+import Cover1 from "./assets/1.png";
 
 import "./App.css";
+
+const tempSong: SongCoverProps = {
+  coverUrl: Cover1,
+  songName: "פרופיל 97",
+  artist: "פאר טסי",
+};
+
+const songsAmount = 25;
+const allSongs: React.ReactNode[] = [];
+for (let i = 0; i < songsAmount; i++) {
+  allSongs.push(
+    <SongCover
+      key={i}
+      {...tempSong}
+      buttons={[<Button>play</Button>, <Button>add to queue</Button>]}
+    />
+  );
+}
 
 const theme = createTheme({
   components: {
@@ -33,6 +53,10 @@ const theme = createTheme({
   },
   palette: {
     mode: "dark",
+    background: {
+      default: "#0d0d0d", // darker main background
+      paper: "#1a1a1a", // slightly lighter for cards/panels
+    },
     secondary: {
       main: "#2d2d2d",
       contrastText: "#ffffff",
@@ -55,7 +79,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
         <Header
           left={[<Logo />]}
           center={[<div>searchbar</div>]}
@@ -70,29 +94,50 @@ function App() {
             display: "flex",
             flexGrow: 1,
             gap: showQueue ? 1.5 : 0,
+            overflow: "hidden",
           }}
         >
           <QueueDrawer
             showQueue={showQueue}
             setShowQueue={setShowQueue}
             items={[
-              <div key={1}>song1</div>,
-              <div key={2}>song2</div>,
-              <div key={3}>song3</div>,
+              <SongCover
+                {...tempSong}
+                buttons={[<Button>D</Button>]}
+              ></SongCover>,
+              <SongCover
+                {...tempSong}
+                buttons={[<Button>D</Button>]}
+              ></SongCover>,
+              <SongCover
+                {...tempSong}
+                buttons={[<Button>D</Button>]}
+              ></SongCover>,
             ]}
           />
 
-          <Box className="content" gap={1.5}>
-            <Typography variant="h1">test test test</Typography>
-            <Typography variant="h1">test test test</Typography>
-            <Typography variant="h1">test test test</Typography>
+          <Box
+            className="content"
+            gap={2}
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              overflowY: "auto",
+              alignContent: "flex-start",
+              width: "100%",
+              scrollbarWidth: "none", // Firefox
+              "&::-webkit-scrollbar": { display: "none" }, // Chrome/Safari
+            }}
+          >
+            {allSongs}
           </Box>
         </Box>
 
         <Footer
           left={[
             <QueueBtn showQueue={showQueue} setShowQueue={setShowQueue} />,
-            <div>playing now</div>,
+            <SongCover {...tempSong}></SongCover>,
           ]}
           center={[<span>[ || ]</span>, <div>---------------</div>]}
           right={[<div>volume</div>, <div>shuffle</div>, <div>repeat</div>]}
