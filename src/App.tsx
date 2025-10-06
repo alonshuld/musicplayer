@@ -8,7 +8,9 @@ import { QueueBtn } from "./components/common/QueueBtn";
 import { QueueDrawer } from "./components/common/QueueDrawer";
 import { SongCover } from "./components/common/SongCover";
 import { Error } from "./components/common/Error";
-import { useSongs, type Song } from "./SongsFetcher";
+import { PlayBtn } from "./components/common/PlayBtn";
+import { useSongs } from "./api/useSongs";
+import { type Song, usePlayer } from "./hooks/usePlayer";
 
 import "./App.css";
 
@@ -59,6 +61,22 @@ const theme = createTheme({
 
 function App() {
   const [showQueue, setShowQueue] = useState(false);
+  const {
+    play,
+    next,
+    previous,
+    togglePlay,
+    addToQueue,
+    seek,
+    setVolume,
+    current,
+    queue,
+    history,
+    isPlaying,
+    volume,
+    progress,
+    duration,
+  } = usePlayer();
   const { data: songs, isLoading, error } = useSongs();
 
   return (
@@ -84,7 +102,14 @@ function App() {
           <QueueDrawer
             showQueue={showQueue}
             setShowQueue={setShowQueue}
-            items={[]}
+            items={queue.map((song: Song) => (
+              <SongCover
+                key={song.id}
+                songName={song.name}
+                artist={song.artist}
+                cover={song.cover}
+              />
+            ))}
           />
 
           <Box
@@ -112,6 +137,7 @@ function App() {
                   songName={song.name}
                   artist={song.artist}
                   cover={song.cover}
+                  buttons={[<PlayBtn play={play} song={song} />]}
                 />
               ))
             )}
@@ -121,6 +147,14 @@ function App() {
         <Footer
           left={[
             <QueueBtn showQueue={showQueue} setShowQueue={setShowQueue} />,
+            current ? (
+              <SongCover
+                key={current.id}
+                songName={current.name}
+                artist={current.artist}
+                cover={current.cover}
+              />
+            ) : null,
           ]}
           center={[<span>[ || ]</span>, <div>---------------</div>]}
           right={[<div>volume</div>, <div>shuffle</div>, <div>repeat</div>]}
