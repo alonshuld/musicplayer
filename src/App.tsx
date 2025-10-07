@@ -175,7 +175,11 @@ function App() {
                   cover={song.cover}
                   buttons={[
                     <PlayBtn key={"PlayBtn"} play={play} song={song} />,
-                    <AddToQueueBtn addToQueue={addToQueue} song={song} />,
+                    <AddToQueueBtn
+                      key={"AddToQueueBtn"}
+                      addToQueue={addToQueue}
+                      song={song}
+                    />,
                   ]}
                 />
               ))
