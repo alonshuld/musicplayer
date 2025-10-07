@@ -16,6 +16,7 @@ export interface PlayerState {
   volume: number;
   progress: number;
   duration: number;
+  isShuffled: boolean;
 }
 
 export const usePlayer = () => {
@@ -27,10 +28,12 @@ export const usePlayer = () => {
     volume: 0.5,
     progress: 0,
     duration: 0,
+    isShuffled: false,
   });
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const currentSongRef = useRef<string | null>(null);
+  const originalQueueRef = useRef<Song[]>([]);
 
   // Initialize audio element once
   useEffect(() => {
@@ -154,7 +157,7 @@ export const usePlayer = () => {
     });
   }, []);
 
-   const togglePlay = useCallback(() => {
+  const togglePlay = useCallback(() => {
     setState((prev) => {
       if (!prev.current) {
         // If no current song but queue exists, start playing the first song
@@ -228,6 +231,26 @@ export const usePlayer = () => {
     setState((prev) => ({ ...prev, volume: vol }));
   }, []);
 
+  const shuffle = useCallback(() => {
+    setState((prev) => {
+      if (prev.isShuffled) {
+        return {
+          ...prev,
+          queue: originalQueueRef.current,
+          isShuffled: false,
+        };
+      } else {
+        originalQueueRef.current = [...prev.queue];
+        const shuffled = [...prev.queue].sort(() => Math.random() - 0.5);
+        return {
+          ...prev,
+          queue: shuffled,
+          isShuffled: true,
+        };
+      }
+    });
+  }, []);
+
   return {
     ...state,
     play,
@@ -237,5 +260,6 @@ export const usePlayer = () => {
     addToQueue,
     seek,
     setVolume,
+    shuffle,
   };
 };

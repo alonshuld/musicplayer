@@ -17,6 +17,7 @@ import { type Song, usePlayer } from "./hooks/usePlayer";
 
 import "./App.css";
 import { AddToQueueBtn } from "./components/common/AddToQueueBtn";
+import { ShuffleBtn } from "./components/common/ShuffleBtn";
 
 const theme = createTheme({
   components: {
@@ -95,6 +96,8 @@ function App() {
     volume,
     progress,
     duration,
+    isShuffled,
+    shuffle,
   } = usePlayer();
   const { data: songs, isLoading, error } = useSongs();
 
@@ -199,7 +202,11 @@ function App() {
           ]}
           right={[
             <Volume key={"Volume"} volume={volume} setVolume={setVolume} />,
-            <div key={"TempShuffle"}>shuffle</div>,
+            <ShuffleBtn
+              key={"Shuffle"}
+              isShuffled={isShuffled}
+              shuffle={shuffle}
+            />,
             <div key={"TempRepeat"}>repeat</div>,
           ]}
         />
