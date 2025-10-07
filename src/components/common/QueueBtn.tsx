@@ -10,7 +10,7 @@ export interface QueueBtnProps {
 export const QueueBtn: FC<QueueBtnProps> = ({ showQueue, setShowQueue }) => {
   return (
     <IconButton onClick={() => setShowQueue(!showQueue)}>
-      <QueueMusic color="primary" fontSize="large" />
+      <QueueMusic />
     </IconButton>
   );
 };

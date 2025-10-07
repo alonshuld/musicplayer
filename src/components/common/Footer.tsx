@@ -40,7 +40,6 @@ export const Footer: FC<HeaderProps> = ({ left, center, right }) => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             display: "flex",
-            gap: 2,
             alignItems: "center",
             flexDirection: "column",
           }}

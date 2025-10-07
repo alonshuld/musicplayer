@@ -11,6 +11,7 @@ import { Error } from "./components/common/Error";
 import { PlayBtn } from "./components/common/PlayBtn";
 import { PauseBtn } from "./components/common/PauseBtn";
 import { Volume } from "./components/common/Volume";
+import { ProgressBar } from "./components/common/ProgressBar";
 import { useSongs } from "./api/useSongs";
 import { type Song, usePlayer } from "./hooks/usePlayer";
 
@@ -18,6 +19,21 @@ import "./App.css";
 
 const theme = createTheme({
   components: {
+    MuiSvgIcon: {
+      defaultProps: {
+        color: "primary",
+        fontSize: "large",
+      },
+    },
+    MuiSlider: {
+      styleOverrides: {
+        thumb: {
+          "&:hover, &.Mui-focusVisible, &.Mui-active": {
+            boxShadow: "none",
+          },
+        },
+      },
+    },
     MuiIconButton: {
       styleOverrides: {
         root: {
@@ -85,9 +101,9 @@ function App() {
     <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
         <Header
-          left={[<Logo />]}
-          center={[<div>searchbar</div>]}
-          right={[<div>admin button</div>]}
+          left={[<Logo key={"Logo"} />]}
+          center={[<div key={"TempSearchBar"}>searchbar</div>]}
+          right={[<div key={"TempAdmin"}>admin button</div>]}
         />
 
         <Box
@@ -139,7 +155,9 @@ function App() {
                   songName={song.name}
                   artist={song.artist}
                   cover={song.cover}
-                  buttons={[<PlayBtn play={play} song={song} />]}
+                  buttons={[
+                    <PlayBtn key={"PlayBtn"} play={play} song={song} />,
+                  ]}
                 />
               ))
             )}
@@ -148,7 +166,11 @@ function App() {
 
         <Footer
           left={[
-            <QueueBtn showQueue={showQueue} setShowQueue={setShowQueue} />,
+            <QueueBtn
+              key={"QueueBtn"}
+              showQueue={showQueue}
+              setShowQueue={setShowQueue}
+            />,
             current ? (
               <SongCover
                 key={current.id}
@@ -159,13 +181,22 @@ function App() {
             ) : null,
           ]}
           center={[
-            <PauseBtn isPlaying={isPlaying} togglePlay={togglePlay} />,
-            <div>---------------</div>,
+            <PauseBtn
+              key={"PauseBtn"}
+              isPlaying={isPlaying}
+              togglePlay={togglePlay}
+            />,
+            <ProgressBar
+              key={"ProgressBar"}
+              progress={progress}
+              duration={duration}
+              seek={seek}
+            />,
           ]}
           right={[
-            <Volume volume={volume} setVolume={setVolume} />,
-            <div>shuffle</div>,
-            <div>repeat</div>,
+            <Volume key={"Volume"} volume={volume} setVolume={setVolume} />,
+            <div key={"TempShuffle"}>shuffle</div>,
+            <div key={"TempRepeat"}>repeat</div>,
           ]}
         />
       </Box>
