@@ -24,7 +24,7 @@ export const usePlayer = () => {
     queue: [],
     history: [],
     isPlaying: false,
-    volume: 1,
+    volume: 0.5,
     progress: 0,
     duration: 0,
   });
@@ -36,7 +36,7 @@ export const usePlayer = () => {
   useEffect(() => {
     if (!audioRef.current) {
       audioRef.current = new Audio();
-      audioRef.current.volume = 1;
+      audioRef.current.volume = 0.5;
     }
 
     const audio = audioRef.current;
@@ -214,8 +214,7 @@ export const usePlayer = () => {
   }, []);
 
   const setVolume = useCallback((vol: number) => {
-    const clampedVol = Math.max(0, Math.min(1, vol));
-    setState((prev) => ({ ...prev, volume: clampedVol }));
+    setState((prev) => ({ ...prev, volume: vol }));
   }, []);
 
   return {
