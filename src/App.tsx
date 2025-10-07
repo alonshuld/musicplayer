@@ -11,6 +11,7 @@ import { Error } from "./components/common/Error";
 import { PlayBtn } from "./components/common/PlayBtn";
 import { PauseBtn } from "./components/common/PauseBtn";
 import { Volume } from "./components/common/Volume";
+import { ProgressBar } from "./components/common/ProgressBar";
 import { useSongs } from "./api/useSongs";
 import { type Song, usePlayer } from "./hooks/usePlayer";
 
@@ -18,6 +19,21 @@ import "./App.css";
 
 const theme = createTheme({
   components: {
+    MuiSvgIcon: {
+      defaultProps: {
+        color: "primary",
+        fontSize: "large",
+      },
+    },
+    MuiSlider: {
+      styleOverrides: {
+        thumb: {
+          "&:hover, &.Mui-focusVisible, &.Mui-active": {
+            boxShadow: "none",
+          },
+        },
+      },
+    },
     MuiIconButton: {
       styleOverrides: {
         root: {
@@ -160,7 +176,7 @@ function App() {
           ]}
           center={[
             <PauseBtn isPlaying={isPlaying} togglePlay={togglePlay} />,
-            <div>---------------</div>,
+            <ProgressBar progress={progress} duration={duration} seek={seek} />,
           ]}
           right={[
             <Volume volume={volume} setVolume={setVolume} />,

@@ -11,7 +11,7 @@ export interface PlayBtnProps {
 export const PlayBtn: FC<PlayBtnProps> = ({ play, song }) => {
   return (
     <IconButton onClick={() => play(song)}>
-      <PlayArrowRounded color="primary" fontSize="large" />
+      <PlayArrowRounded />
     </IconButton>
   );
 };
