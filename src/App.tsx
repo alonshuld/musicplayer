@@ -13,6 +13,7 @@ import { useSongs } from "./api/useSongs";
 import { type Song, usePlayer } from "./hooks/usePlayer";
 
 import "./App.css";
+import { PauseBtn } from "./components/common/PauseBtn";
 
 const theme = createTheme({
   components: {
@@ -156,7 +157,10 @@ function App() {
               />
             ) : null,
           ]}
-          center={[<span>[ || ]</span>, <div>---------------</div>]}
+          center={[
+            <PauseBtn isPlaying={isPlaying} togglePlay={togglePlay} />,
+            <div>---------------</div>,
+          ]}
           right={[<div>volume</div>, <div>shuffle</div>, <div>repeat</div>]}
         />
       </Box>

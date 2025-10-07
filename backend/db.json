@@ -2,10 +2,10 @@
   "songs": [
     {
       "id": 1,
-      "name": "Echo in Motion",
-      "artist": "Nova Reed",
-      "cover": "../backend/assets/covers/cover_1.jpg",
-      "sound": "../backend/assets/sounds/01_beep.wav"
+      "name": "הספר הכחול",
+      "artist": "פאר טסי",
+      "cover": "../backend/assets/covers/field_radio_3.png",
+      "sound": "../backend/assets/sounds/blue_book.mp3"
     },
     {
       "id": 2,
