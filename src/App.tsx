@@ -16,6 +16,7 @@ import { PlaybackControl } from "./components/common/PlaybackControl";
 import { AddToQueueBtn } from "./components/common/AddToQueueBtn";
 import { ShuffleBtn } from "./components/common/ShuffleBtn";
 import { RepeatBtn } from "./components/common/RepeatBtn";
+import { RemoveFromQueueBtn } from "./components/common/RemoveFromQueueBtn";
 
 import { useSongs } from "./hooks/useSongs";
 import { type Song, usePlayer } from "./hooks/usePlayer";
@@ -103,6 +104,7 @@ function App() {
     shuffle,
     repeatMode,
     repeat,
+    removeFromQueue,
   } = usePlayer();
   const { data: songs, isLoading, error } = useSongs();
 
@@ -135,6 +137,13 @@ function App() {
                 name={song.name}
                 artist={song.artist}
                 cover={song.cover}
+                buttons={[
+                  <RemoveFromQueueBtn
+                    key={"RemoveFromQueueBtn"}
+                    songId={song.id}
+                    removeFromQueue={removeFromQueue}
+                  />,
+                ]}
               />
             ))}
           />
