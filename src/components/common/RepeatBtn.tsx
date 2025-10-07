@@ -9,7 +9,7 @@ export interface RepeatBtnProps {
 
 export const RepeatBtn: FC<RepeatBtnProps> = ({ repeatMode, repeat }) => {
   return (
-    <IconButton onClick={repeat} disableRipple>
+    <IconButton onClick={repeat}>
       {repeatMode == "one" ? (
         <RepeatOneRounded sx={{ color: "primary.dark" }} />
       ) : (
