@@ -12,7 +12,7 @@ import { PlayBtn } from "./components/common/PlayBtn";
 import { Volume } from "./components/common/Volume";
 import { ProgressBar } from "./components/common/ProgressBar";
 import { PlaybackControl } from "./components/common/PlaybackControl";
-import { useSongs } from "./api/useSongs";
+import { useSongs } from "./hooks/useSongs";
 import { type Song, usePlayer } from "./hooks/usePlayer";
 
 import "./App.css";
