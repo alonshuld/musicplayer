@@ -1,7 +1,7 @@
 import { type FC } from "react";
 import { IconButton } from "@mui/material";
 import { QueueRounded } from "@mui/icons-material";
-import { type Song } from "../../hooks/usePlayer";
+import { type Song } from "../../types/Song";
 
 export interface AddToQueueBtnProps {
   song: Song;

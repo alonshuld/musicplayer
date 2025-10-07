@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Box, Typography } from "@mui/material";
-import { type Song } from "../../hooks/usePlayer";
+import { type Song } from "../../types/Song";
 
 export interface SongCoverProps
   extends Pick<Song, "cover" | "name" | "artist"> {

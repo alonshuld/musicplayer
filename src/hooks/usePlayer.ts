@@ -1,13 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from "react";
-
-export interface Song {
-  id: number;
-  name: string;
-  artist: string;
-  cover: string;
-  sound: string;
-}
-
+import { type Song } from "../types/Song";
 export interface PlayerState {
   current: Song | null;
   queue: Song[];
