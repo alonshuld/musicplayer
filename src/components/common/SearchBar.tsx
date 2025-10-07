@@ -1,5 +1,6 @@
 import { type FC } from "react";
 import { Box, TextField } from "@mui/material";
+import { Search } from "@mui/icons-material";
 
 export interface SearchBarProps {
   searchTerm: string;
@@ -11,13 +12,21 @@ export const SearchBar: FC<SearchBarProps> = ({
   setSearchTerm,
 }) => {
   return (
-    <Box sx={{ mb: 2, display: "flex", justifyContent: "center" }}>
+    <Box sx={{ mb: 2, display: "flex", m: 0 }}>
       <TextField
-        label="Search songs"
-        variant="outlined"
         size="small"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
+        slotProps={{
+          input: {
+            startAdornment: <Search />,
+          },
+        }}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            borderRadius: 4,
+          },
+        }}
       />
     </Box>
   );
