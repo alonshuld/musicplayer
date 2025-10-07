@@ -9,17 +9,8 @@ export interface ShuffleBtnProps {
 
 export const ShuffleBtn: FC<ShuffleBtnProps> = ({ isShuffled, shuffle }) => {
   return (
-    <IconButton
-      onClick={shuffle}
-      sx={{
-        color: isShuffled ? "primary.main" : "inherit",
-        backgroundColor: isShuffled ? "action.selected" : "transparent",
-        "&:hover": {
-          backgroundColor: isShuffled ? "action.selected" : "action.hover",
-        },
-      }}
-    >
-      <ShuffleRounded />
+    <IconButton onClick={shuffle} disableRipple>
+      <ShuffleRounded sx={{ color: isShuffled ? "primary.dark" : "primary" }} />
     </IconButton>
   );
 };
