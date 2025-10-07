@@ -234,12 +234,18 @@ export const usePlayer = () => {
   const shuffle = useCallback(() => {
     setState((prev) => {
       if (prev.isShuffled) {
+        // unShuffle: restore original order, but only for remaining songs
+        const remainingSongIds = new Set(prev.queue.map((s) => s.id));
+        const unShuffled = originalQueueRef.current.filter((s) =>
+          remainingSongIds.has(s.id)
+        );
         return {
           ...prev,
-          queue: originalQueueRef.current,
+          queue: unShuffled,
           isShuffled: false,
         };
       } else {
+        // Shuffle: save original order and randomize
         originalQueueRef.current = [...prev.queue];
         const shuffled = [...prev.queue].sort(() => Math.random() - 0.5);
         return {
