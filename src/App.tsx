@@ -16,6 +16,7 @@ import { useSongs } from "./api/useSongs";
 import { type Song, usePlayer } from "./hooks/usePlayer";
 
 import "./App.css";
+import { AddToQueueBtn } from "./components/common/AddToQueueBtn";
 
 const theme = createTheme({
   components: {
@@ -42,7 +43,7 @@ const theme = createTheme({
           },
           transition: "transform 0.2s ease, background-color 0.2s ease",
           "&:hover": {
-            transform: "scale(1.05)",
+            transform: "scale(1.2)",
           },
           "&:active": {
             transform: "scale(0.9)",
@@ -157,6 +158,7 @@ function App() {
                   cover={song.cover}
                   buttons={[
                     <PlayBtn key={"PlayBtn"} play={play} song={song} />,
+                    <AddToQueueBtn addToQueue={addToQueue} song={song} />,
                   ]}
                 />
               ))
