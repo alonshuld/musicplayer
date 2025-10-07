@@ -9,6 +9,7 @@ import { QueueDrawer } from "./components/common/QueueDrawer";
 import { SongCover } from "./components/common/SongCover";
 import { Error } from "./components/common/Error";
 import { PlayBtn } from "./components/common/PlayBtn";
+import { PauseBtn } from "./components/common/PauseBtn";
 import { Volume } from "./components/common/Volume";
 import { useSongs } from "./api/useSongs";
 import { type Song, usePlayer } from "./hooks/usePlayer";
@@ -157,7 +158,10 @@ function App() {
               />
             ) : null,
           ]}
-          center={[<span>[ || ]</span>, <div>---------------</div>]}
+          center={[
+            <PauseBtn isPlaying={isPlaying} togglePlay={togglePlay} />,
+            <div>---------------</div>,
+          ]}
           right={[
             <Volume volume={volume} setVolume={setVolume} />,
             <div>shuffle</div>,

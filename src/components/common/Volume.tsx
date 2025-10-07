@@ -18,8 +18,18 @@ export const Volume: FC<volumeProps> = ({ volume, setVolume }) => {
       <Slider
         value={volume}
         onChange={(_, newValue) => setVolume(newValue)}
-        valueLabelDisplay="auto"
         size={"small"}
+        min={0}
+        max={1}
+        step={0.01}
+        defaultValue={0.2}
+        sx={{
+          "& .MuiSlider-thumb": {
+            "&:hover, &.Mui-focusVisible, &.Mui-active": {
+              boxShadow: "none",
+            },
+          },
+        }}
       />
     </Box>
   );
