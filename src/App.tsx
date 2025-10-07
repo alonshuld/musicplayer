@@ -9,9 +9,9 @@ import { QueueDrawer } from "./components/common/QueueDrawer";
 import { SongCover } from "./components/common/SongCover";
 import { Error } from "./components/common/Error";
 import { PlayBtn } from "./components/common/PlayBtn";
-import { PauseBtn } from "./components/common/PauseBtn";
 import { Volume } from "./components/common/Volume";
 import { ProgressBar } from "./components/common/ProgressBar";
+import { PlaybackControl } from "./components/common/PlaybackControl";
 import { useSongs } from "./api/useSongs";
 import { type Song, usePlayer } from "./hooks/usePlayer";
 
@@ -47,6 +47,7 @@ const theme = createTheme({
           "&:active": {
             transform: "scale(0.9)",
           },
+          padding: 0,
         },
       },
       defaultProps: {
@@ -89,7 +90,6 @@ function App() {
     setVolume,
     current,
     queue,
-    history,
     isPlaying,
     volume,
     progress,
@@ -123,7 +123,7 @@ function App() {
             items={queue.map((song: Song) => (
               <SongCover
                 key={song.id}
-                songName={song.name}
+                name={song.name}
                 artist={song.artist}
                 cover={song.cover}
               />
@@ -152,7 +152,7 @@ function App() {
               songs?.map((song: Song) => (
                 <SongCover
                   key={song.id}
-                  songName={song.name}
+                  name={song.name}
                   artist={song.artist}
                   cover={song.cover}
                   buttons={[
@@ -174,17 +174,19 @@ function App() {
             current ? (
               <SongCover
                 key={current.id}
-                songName={current.name}
+                name={current.name}
                 artist={current.artist}
                 cover={current.cover}
               />
             ) : null,
           ]}
           center={[
-            <PauseBtn
-              key={"PauseBtn"}
+            <PlaybackControl
+              key={"PlaybackControl"}
+              previous={previous}
               isPlaying={isPlaying}
               togglePlay={togglePlay}
+              next={next}
             />,
             <ProgressBar
               key={"ProgressBar"}

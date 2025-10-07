@@ -1,16 +1,15 @@
-import { Box, Typography } from "@mui/material";
 import { useState, useEffect, useRef } from "react";
+import { Box, Typography } from "@mui/material";
+import { type Song } from "../../hooks/usePlayer";
 
-export interface SongCoverProps {
-  cover: string;
-  songName: string;
-  artist: string;
+export interface SongCoverProps
+  extends Pick<Song, "cover" | "name" | "artist"> {
   buttons?: React.ReactNode[];
 }
 
 export const SongCover: React.FC<SongCoverProps> = ({
   cover,
-  songName,
+  name,
   artist,
   buttons = [],
 }) => {
@@ -51,7 +50,7 @@ export const SongCover: React.FC<SongCoverProps> = ({
       <Box sx={{ position: "relative", flexShrink: 0 }}>
         <img
           src={cover}
-          alt={songName}
+          alt={name}
           style={{
             width: layout === "compact" ? 48 : "100%",
             height: layout === "compact" ? 48 : 160,
@@ -89,7 +88,7 @@ export const SongCover: React.FC<SongCoverProps> = ({
         }}
       >
         <Typography variant="subtitle1" color="text.primary" noWrap>
-          {songName}
+          {name}
         </Typography>
         <Typography variant="body2" color="text.secondary" noWrap>
           {artist}

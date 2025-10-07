@@ -2,12 +2,12 @@ import { type FC } from "react";
 import { Slider, Box } from "@mui/material";
 import { VolumeUpRounded, VolumeOffRounded } from "@mui/icons-material";
 
-export interface volumeProps {
+export interface VolumeProps {
   volume: number;
   setVolume: (vol: number) => void;
 }
 
-export const Volume: FC<volumeProps> = ({ volume, setVolume }) => {
+export const Volume: FC<VolumeProps> = ({ volume, setVolume }) => {
   return (
     <Box sx={{ display: "flex", width: 150, gap: 1, alignItems: "center" }}>
       {volume ? <VolumeUpRounded /> : <VolumeOffRounded />}
