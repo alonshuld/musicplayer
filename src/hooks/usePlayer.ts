@@ -13,9 +13,9 @@ export interface PlayerState {
   queue: Song[];
   history: Song[];
   isPlaying: boolean;
-  volume: number;       // 0 to 1
-  progress: number;     // seconds
-  duration: number;     // seconds
+  volume: number;
+  progress: number;
+  duration: number;
 }
 
 export const usePlayer = () => {
@@ -30,82 +30,142 @@ export const usePlayer = () => {
   });
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const progressInterval = useRef<number | null>(null);
+  const currentSongRef = useRef<string | null>(null);
 
-  const { current, isPlaying, volume } = state;
-
-  // Play or change song
+  // Initialize audio element once
   useEffect(() => {
-    if (!current) return;
-
-    // Stop previous audio
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.src = "";
+    if (!audioRef.current) {
+      audioRef.current = new Audio();
+      audioRef.current.volume = 1;
     }
 
-    // Create new audio
-    audioRef.current = new Audio(current.sound);
-    audioRef.current.volume = volume;
+    const audio = audioRef.current;
 
-    // When metadata loads, update duration
-    audioRef.current.onloadedmetadata = () => {
-      setState((prev) => ({ ...prev, duration: audioRef.current!.duration }));
+    const handleEnded = () => {
+      setState((prev) => {
+        if (prev.queue.length === 0) {
+          return { ...prev, isPlaying: false };
+        }
+        const [nextSong, ...rest] = prev.queue;
+        return {
+          ...prev,
+          history: prev.current ? [prev.current, ...prev.history] : prev.history,
+          current: nextSong,
+          queue: rest,
+          progress: 0,
+        };
+      });
     };
 
-    // Start playback if isPlaying
-    if (isPlaying) {
-      audioRef.current.play().catch((err) => console.error(err));
-    }
+    const handleTimeUpdate = () => {
+      setState((prev) => ({
+        ...prev,
+        progress: audio.currentTime,
+      }));
+    };
 
-    // Update progress every 500ms
-    progressInterval.current = window.setInterval(() => {
-      if (audioRef.current) {
-        setState((prev) => ({ ...prev, progress: audioRef.current!.currentTime }));
-      }
-    }, 500);
+    const handleLoadedMetadata = () => {
+      setState((prev) => ({
+        ...prev,
+        duration: audio.duration || 0,
+      }));
+    };
 
-    // Cleanup
+    audio.addEventListener("ended", handleEnded);
+    audio.addEventListener("timeupdate", handleTimeUpdate);
+    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+
     return () => {
-      if (audioRef.current) audioRef.current.pause();
-      if (progressInterval.current) clearInterval(progressInterval.current);
+      audio.removeEventListener("ended", handleEnded);
+      audio.removeEventListener("timeupdate", handleTimeUpdate);
+      audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      audio.pause();
+      audio.src = "";
     };
-  }, [current, isPlaying, volume]);
+  }, []);
 
-  // Toggle play/pause
-  const togglePlay = useCallback(() => {
-    if (!audioRef.current) return;
-    if (state.isPlaying) audioRef.current.pause();
-    else audioRef.current.play().catch((err) => console.error(err));
+  // Sync audio source when current song changes
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !state.current) return;
 
-    setState((prev) => ({ ...prev, isPlaying: !prev.isPlaying }));
-  }, [state.isPlaying]);
+    const newSrc = state.current.sound;
+    if (currentSongRef.current !== newSrc) {
+      currentSongRef.current = newSrc;
+      audio.src = newSrc;
+      audio.load();
 
-  // Play a song immediately
+      if (state.isPlaying) {
+        audio.play().catch((err) => {
+          console.error("Playback failed:", err);
+          setState((prev) => ({ ...prev, isPlaying: false }));
+        });
+      }
+    }
+  }, [state, state.isPlaying]);
+
+  // Sync play/pause state
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !state.current) return;
+
+    if (state.isPlaying && audio.paused) {
+      audio.play().catch((err) => {
+        console.error("Playback failed:", err);
+        setState((prev) => ({ ...prev, isPlaying: false }));
+      });
+    } else if (!state.isPlaying && !audio.paused) {
+      audio.pause();
+    }
+  }, [state, state.isPlaying]);
+
+  // Sync volume
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = state.volume;
+    }
+  }, [state.volume]);
+
   const play = useCallback((song: Song) => {
-  setState((prev) => {
-    // If the same song is clicked, reset progress
-    const isSameSong = prev.current?.id === song.id;
-    return {
-      ...prev,
-      current: song,
-      isPlaying: true,
-      progress: isSameSong ? 0 : prev.progress,
-    };
-  });
+    const audio = audioRef.current;
 
-  // Restart the audio manually
-  if (audioRef.current) {
-    audioRef.current.pause();
-    audioRef.current.currentTime = 0;
-    audioRef.current.play().catch((err) => console.error(err));
-  }
-}, []);
+    setState((prev) => {
+      const isSameSong = prev.current?.id === song.id;
 
-  // Next song
+      // If playing the same song, restart it immediately
+      if (isSameSong && audio) {
+        audio.currentTime = 0;
+        if (audio.paused) {
+          audio.play().catch((err) => {
+            console.error("Playback failed:", err);
+          });
+        }
+      }
+
+      return {
+        ...prev,
+        current: song,
+        isPlaying: true,
+        progress: 0,
+        history: isSameSong || !prev.current
+          ? prev.history
+          : [prev.current, ...prev.history],
+      };
+    });
+  }, []);
+
+  const togglePlay = useCallback(() => {
+    setState((prev) => {
+      if (!prev.current) return prev;
+      return { ...prev, isPlaying: !prev.isPlaying };
+    });
+  }, []);
+
   const next = useCallback(() => {
     setState((prev) => {
-      if (prev.queue.length === 0) return { ...prev, isPlaying: false };
+      if (prev.queue.length === 0) {
+        return { ...prev, isPlaying: false, current: null, progress: 0 };
+      }
       const [nextSong, ...rest] = prev.queue;
       return {
         ...prev,
@@ -118,10 +178,15 @@ export const usePlayer = () => {
     });
   }, []);
 
-  // Previous song
   const previous = useCallback(() => {
     setState((prev) => {
-      if (prev.history.length === 0) return prev;
+      if (prev.history.length === 0) {
+        // Restart current song
+        if (audioRef.current) {
+          audioRef.current.currentTime = 0;
+        }
+        return { ...prev, progress: 0 };
+      }
       const [lastSong, ...rest] = prev.history;
       return {
         ...prev,
@@ -134,7 +199,6 @@ export const usePlayer = () => {
     });
   }, []);
 
-  // Add to queue
   const addToQueue = useCallback((song: Song) => {
     setState((prev) => ({
       ...prev,
@@ -142,16 +206,16 @@ export const usePlayer = () => {
     }));
   }, []);
 
-  // Seek to a specific time (in seconds)
   const seek = useCallback((time: number) => {
-    if (audioRef.current) audioRef.current.currentTime = time;
+    if (audioRef.current) {
+      audioRef.current.currentTime = time;
+    }
     setState((prev) => ({ ...prev, progress: time }));
   }, []);
 
-  // Change volume (0 to 1)
   const setVolume = useCallback((vol: number) => {
-    if (audioRef.current) audioRef.current.volume = vol;
-    setState((prev) => ({ ...prev, volume: vol }));
+    const clampedVol = Math.max(0, Math.min(1, vol));
+    setState((prev) => ({ ...prev, volume: clampedVol }));
   }, []);
 
   return {
