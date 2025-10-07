@@ -2,6 +2,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
 import { Box, CircularProgress } from "@mui/material";
 
+import type { Song } from "./types/Song";
+
 import { Header } from "./components/common/Header";
 import { Logo } from "./components/common/Logo";
 import { Footer } from "./components/common/Footer";
@@ -19,9 +21,11 @@ import { RepeatBtn } from "./components/common/RepeatBtn";
 import { RemoveFromQueueBtn } from "./components/common/RemoveFromQueueBtn";
 
 import { useSongs } from "./hooks/useSongs";
-import { type Song, usePlayer } from "./hooks/usePlayer";
+import { usePlayer } from "./hooks/usePlayer";
+import { useFilteredSongs } from "./hooks/useFilteredSongs";
 
 import "./App.css";
+import { SearchBar } from "./components/common/SearchBar";
 
 const theme = createTheme({
   components: {
@@ -107,13 +111,17 @@ function App() {
     removeFromQueue,
   } = usePlayer();
   const { data: songs, isLoading, error } = useSongs();
+  const [searchTerm, setSearchTerm] = useState("");
+  const filteredSongs = useFilteredSongs(songs, searchTerm);
 
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
         <Header
           left={[<Logo key={"Logo"} />]}
-          center={[<div key={"TempSearchBar"}>searchbar</div>]}
+          center={[
+            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />,
+          ]}
           right={[<div key={"TempAdmin"}>admin button</div>]}
         />
 
@@ -167,16 +175,16 @@ function App() {
             ) : error ? (
               <Error message={error.message} />
             ) : (
-              songs?.map((song: Song) => (
+              filteredSongs?.map((song: Song) => (
                 <SongCover
                   key={song.id}
                   name={song.name}
                   artist={song.artist}
                   cover={song.cover}
                   buttons={[
-                    <PlayBtn key={"PlayBtn"} play={play} song={song} />,
+                    <PlayBtn key="PlayBtn" play={play} song={song} />,
                     <AddToQueueBtn
-                      key={"AddToQueueBtn"}
+                      key="AddToQueueBtn"
                       addToQueue={addToQueue}
                       song={song}
                     />,
