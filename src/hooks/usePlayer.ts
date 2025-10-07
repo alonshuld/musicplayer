@@ -154,9 +154,20 @@ export const usePlayer = () => {
     });
   }, []);
 
-  const togglePlay = useCallback(() => {
+   const togglePlay = useCallback(() => {
     setState((prev) => {
-      if (!prev.current) return prev;
+      if (!prev.current) {
+        // If no current song but queue exists, start playing the first song
+        if (prev.queue.length === 0) return prev;
+        const [nextSong, ...rest] = prev.queue;
+        return {
+          ...prev,
+          current: nextSong,
+          queue: rest,
+          isPlaying: true,
+          progress: 0,
+        };
+      }
       return { ...prev, isPlaying: !prev.isPlaying };
     });
   }, []);
