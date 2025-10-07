@@ -4,351 +4,351 @@
       "id": 1,
       "name": "הספר הכחול",
       "artist": "פאר טסי",
-      "cover": "../backend/assets/covers/field_radio_3.png",
-      "sound": "../backend/assets/sounds/blue_book.mp3"
+      "cover": "http://localhost:3001/covers/field_radio_3.png",
+      "sound": "http://localhost:3001/songs/blue_book.mp3"
     },
     {
       "id": 2,
       "name": "Digital Horizon",
       "artist": "Arden Vale",
-      "cover": "../backend/assets/covers/cover_2.jpg",
-      "sound": "../backend/assets/sounds/02_click.wav"
+      "cover": "http://localhost:3001/covers/cover_2.jpg",
+      "sound": "http://localhost:3001/songs/02_click.wav"
     },
     {
       "id": 3,
       "name": "Crystal Chime",
       "artist": "Eira Moon",
-      "cover": "../backend/assets/covers/cover_3.jpg",
-      "sound": "../backend/assets/sounds/03_chime.wav"
+      "cover": "http://localhost:3001/covers/cover_3.jpg",
+      "sound": "http://localhost:3001/songs/03_chime.wav"
     },
     {
       "id": 4,
       "name": "Neon Pulse",
       "artist": "Lyra Skye",
-      "cover": "../backend/assets/covers/cover_4.jpg",
-      "sound": "../backend/assets/sounds/04_beep.wav"
+      "cover": "http://localhost:3001/covers/cover_4.jpg",
+      "sound": "http://localhost:3001/songs/04_beep.wav"
     },
     {
       "id": 5,
       "name": "Binary Drift",
       "artist": "Orion Vega",
-      "cover": "../backend/assets/covers/cover_5.jpg",
-      "sound": "../backend/assets/sounds/05_click.wav"
+      "cover": "http://localhost:3001/covers/cover_5.jpg",
+      "sound": "http://localhost:3001/songs/05_click.wav"
     },
     {
       "id": 6,
       "name": "Silent Bells",
       "artist": "Sera Lynx",
-      "cover": "../backend/assets/covers/cover_6.jpg",
-      "sound": "../backend/assets/sounds/06_chime.wav"
+      "cover": "http://localhost:3001/covers/cover_6.jpg",
+      "sound": "http://localhost:3001/songs/06_chime.wav"
     },
     {
       "id": 7,
       "name": "Microbeat",
       "artist": "Atlas Ray",
-      "cover": "../backend/assets/covers/cover_7.jpg",
-      "sound": "../backend/assets/sounds/07_beep.wav"
+      "cover": "http://localhost:3001/covers/cover_7.jpg",
+      "sound": "http://localhost:3001/songs/07_beep.wav"
     },
     {
       "id": 8,
       "name": "Tap Symphony",
       "artist": "Rhea Solis",
-      "cover": "../backend/assets/covers/cover_8.jpg",
-      "sound": "../backend/assets/sounds/08_click.wav"
+      "cover": "http://localhost:3001/covers/cover_8.jpg",
+      "sound": "http://localhost:3001/songs/08_click.wav"
     },
     {
       "id": 9,
       "name": "Dream Chimes",
       "artist": "Caden Frost",
-      "cover": "../backend/assets/covers/cover_9.jpg",
-      "sound": "../backend/assets/sounds/09_chime.wav"
+      "cover": "http://localhost:3001/covers/cover_9.jpg",
+      "sound": "http://localhost:3001/songs/09_chime.wav"
     },
     {
       "id": 10,
       "name": "Signal Fade",
       "artist": "Luna Vale",
-      "cover": "../backend/assets/covers/cover_10.jpg",
-      "sound": "../backend/assets/sounds/10_beep.wav"
+      "cover": "http://localhost:3001/covers/cover_10.jpg",
+      "sound": "http://localhost:3001/songs/10_beep.wav"
     },
     {
       "id": 11,
       "name": "Lunar Circuit",
       "artist": "Noa Ash",
-      "cover": "../backend/assets/covers/cover_11.jpg",
-      "sound": "../backend/assets/sounds/11_click.wav"
+      "cover": "http://localhost:3001/covers/cover_11.jpg",
+      "sound": "http://localhost:3001/songs/11_click.wav"
     },
     {
       "id": 12,
       "name": "Static Bloom",
       "artist": "Rin Sol",
-      "cover": "../backend/assets/covers/cover_12.jpg",
-      "sound": "../backend/assets/sounds/12_chime.wav"
+      "cover": "http://localhost:3001/covers/cover_12.jpg",
+      "sound": "http://localhost:3001/songs/12_chime.wav"
     },
     {
       "id": 13,
       "name": "Silver Frequency",
       "artist": "Theo Wilde",
-      "cover": "../backend/assets/covers/cover_13.jpg",
-      "sound": "../backend/assets/sounds/13_beep.wav"
+      "cover": "http://localhost:3001/covers/cover_13.jpg",
+      "sound": "http://localhost:3001/songs/13_beep.wav"
     },
     {
       "id": 14,
       "name": "Harmonic Field",
       "artist": "Mira Lune",
-      "cover": "../backend/assets/covers/cover_14.jpg",
-      "sound": "../backend/assets/sounds/14_click.wav"
+      "cover": "http://localhost:3001/covers/cover_14.jpg",
+      "sound": "http://localhost:3001/songs/14_click.wav"
     },
     {
       "id": 15,
       "name": "Digital Ember",
       "artist": "Juno Rhys",
-      "cover": "../backend/assets/covers/cover_15.jpg",
-      "sound": "../backend/assets/sounds/15_chime.wav"
+      "cover": "http://localhost:3001/covers/cover_15.jpg",
+      "sound": "http://localhost:3001/songs/15_chime.wav"
     },
     {
       "id": 16,
       "name": "Aural Path",
       "artist": "Ari Vox",
-      "cover": "../backend/assets/covers/cover_16.jpg",
-      "sound": "../backend/assets/sounds/16_beep.wav"
+      "cover": "http://localhost:3001/covers/cover_16.jpg",
+      "sound": "http://localhost:3001/songs/16_beep.wav"
     },
     {
       "id": 17,
       "name": "Flicker Tone",
       "artist": "Cyra Dawn",
-      "cover": "../backend/assets/covers/cover_17.jpg",
-      "sound": "../backend/assets/sounds/17_click.wav"
+      "cover": "http://localhost:3001/covers/cover_17.jpg",
+      "sound": "http://localhost:3001/songs/17_click.wav"
     },
     {
       "id": 18,
       "name": "Spectrum Flow",
       "artist": "Eli Frost",
-      "cover": "../backend/assets/covers/cover_18.jpg",
-      "sound": "../backend/assets/sounds/18_chime.wav"
+      "cover": "http://localhost:3001/covers/cover_18.jpg",
+      "sound": "http://localhost:3001/songs/18_chime.wav"
     },
     {
       "id": 19,
       "name": "Codewave",
       "artist": "Vira Lyn",
-      "cover": "../backend/assets/covers/cover_19.jpg",
-      "sound": "../backend/assets/sounds/19_beep.wav"
+      "cover": "http://localhost:3001/covers/cover_19.jpg",
+      "sound": "http://localhost:3001/songs/19_beep.wav"
     },
     {
       "id": 20,
       "name": "Soft Mechanism",
       "artist": "Kalen Moth",
-      "cover": "../backend/assets/covers/cover_20.jpg",
-      "sound": "../backend/assets/sounds/20_click.wav"
+      "cover": "http://localhost:3001/covers/cover_20.jpg",
+      "sound": "http://localhost:3001/songs/20_click.wav"
     },
     {
       "id": 21,
       "name": "Pulse Drift",
       "artist": "Nox Hale",
-      "cover": "../backend/assets/covers/cover_21.jpg",
-      "sound": "../backend/assets/sounds/21_chime.wav"
+      "cover": "http://localhost:3001/covers/cover_21.jpg",
+      "sound": "http://localhost:3001/songs/21_chime.wav"
     },
     {
       "id": 22,
       "name": "Celestial Click",
       "artist": "Isen Vale",
-      "cover": "../backend/assets/covers/cover_22.jpg",
-      "sound": "../backend/assets/sounds/22_beep.wav"
+      "cover": "http://localhost:3001/covers/cover_22.jpg",
+      "sound": "http://localhost:3001/songs/22_beep.wav"
     },
     {
       "id": 23,
       "name": "Echo Chamber",
       "artist": "Rhea Solis",
-      "cover": "../backend/assets/covers/cover_23.jpg",
-      "sound": "../backend/assets/sounds/23_click.wav"
+      "cover": "http://localhost:3001/covers/cover_23.jpg",
+      "sound": "http://localhost:3001/songs/23_click.wav"
     },
     {
       "id": 24,
       "name": "Noise Bloom",
       "artist": "Caden Frost",
-      "cover": "../backend/assets/covers/cover_24.jpg",
-      "sound": "../backend/assets/sounds/24_chime.wav"
+      "cover": "http://localhost:3001/covers/cover_24.jpg",
+      "sound": "http://localhost:3001/songs/24_chime.wav"
     },
     {
       "id": 25,
       "name": "Silent Frequency",
       "artist": "Lyra Skye",
-      "cover": "../backend/assets/covers/cover_25.jpg",
-      "sound": "../backend/assets/sounds/25_beep.wav"
+      "cover": "http://localhost:3001/covers/cover_25.jpg",
+      "sound": "http://localhost:3001/songs/25_beep.wav"
     },
     {
       "id": 26,
       "name": "Glitch Dream",
       "artist": "Eira Moon",
-      "cover": "../backend/assets/covers/cover_26.jpg",
-      "sound": "../backend/assets/sounds/26_click.wav"
+      "cover": "http://localhost:3001/covers/cover_26.jpg",
+      "sound": "http://localhost:3001/songs/26_click.wav"
     },
     {
       "id": 27,
       "name": "Electric Whisper",
       "artist": "Nova Reed",
-      "cover": "../backend/assets/covers/cover_27.jpg",
-      "sound": "../backend/assets/sounds/27_chime.wav"
+      "cover": "http://localhost:3001/covers/cover_27.jpg",
+      "sound": "http://localhost:3001/songs/27_chime.wav"
     },
     {
       "id": 28,
       "name": "Waveform Pulse",
       "artist": "Orion Vega",
-      "cover": "../backend/assets/covers/cover_28.jpg",
-      "sound": "../backend/assets/sounds/28_beep.wav"
+      "cover": "http://localhost:3001/covers/cover_28.jpg",
+      "sound": "http://localhost:3001/songs/28_beep.wav"
     },
     {
       "id": 29,
       "name": "Neon Drift",
       "artist": "Mira Lune",
-      "cover": "../backend/assets/covers/cover_29.jpg",
-      "sound": "../backend/assets/sounds/29_click.wav"
+      "cover": "http://localhost:3001/covers/cover_29.jpg",
+      "sound": "http://localhost:3001/songs/29_click.wav"
     },
     {
       "id": 30,
       "name": "Crystal Echo",
       "artist": "Cyra Dawn",
-      "cover": "../backend/assets/covers/cover_30.jpg",
-      "sound": "../backend/assets/sounds/30_chime.wav"
+      "cover": "http://localhost:3001/covers/cover_30.jpg",
+      "sound": "http://localhost:3001/songs/30_chime.wav"
     },
     {
       "id": 31,
       "name": "Hollow Tone",
       "artist": "Theo Wilde",
-      "cover": "../backend/assets/covers/cover_31.jpg",
-      "sound": "../backend/assets/sounds/31_beep.wav"
+      "cover": "http://localhost:3001/covers/cover_31.jpg",
+      "sound": "http://localhost:3001/songs/31_beep.wav"
     },
     {
       "id": 32,
       "name": "Circuit Bloom",
       "artist": "Ari Vox",
-      "cover": "../backend/assets/covers/cover_32.jpg",
-      "sound": "../backend/assets/sounds/32_click.wav"
+      "cover": "http://localhost:3001/covers/cover_32.jpg",
+      "sound": "http://localhost:3001/songs/32_click.wav"
     },
     {
       "id": 33,
       "name": "Pixel Dream",
       "artist": "Juno Rhys",
-      "cover": "../backend/assets/covers/cover_33.jpg",
-      "sound": "../backend/assets/sounds/33_chime.wav"
+      "cover": "http://localhost:3001/covers/cover_33.jpg",
+      "sound": "http://localhost:3001/songs/33_chime.wav"
     },
     {
       "id": 34,
       "name": "Mechanical Rain",
       "artist": "Noa Ash",
-      "cover": "../backend/assets/covers/cover_34.jpg",
-      "sound": "../backend/assets/sounds/34_beep.wav"
+      "cover": "http://localhost:3001/covers/cover_34.jpg",
+      "sound": "http://localhost:3001/songs/34_beep.wav"
     },
     {
       "id": 35,
       "name": "Fractal Wave",
       "artist": "Sera Lynx",
-      "cover": "../backend/assets/covers/cover_35.jpg",
-      "sound": "../backend/assets/sounds/35_click.wav"
+      "cover": "http://localhost:3001/covers/cover_35.jpg",
+      "sound": "http://localhost:3001/songs/35_click.wav"
     },
     {
       "id": 36,
       "name": "Synapse Pulse",
       "artist": "Atlas Ray",
-      "cover": "../backend/assets/covers/cover_36.jpg",
-      "sound": "../backend/assets/sounds/36_chime.wav"
+      "cover": "http://localhost:3001/covers/cover_36.jpg",
+      "sound": "http://localhost:3001/songs/36_chime.wav"
     },
     {
       "id": 37,
       "name": "Data Bloom",
       "artist": "Vira Lyn",
-      "cover": "../backend/assets/covers/cover_37.jpg",
-      "sound": "../backend/assets/sounds/37_beep.wav"
+      "cover": "http://localhost:3001/covers/cover_37.jpg",
+      "sound": "http://localhost:3001/songs/37_beep.wav"
     },
     {
       "id": 38,
       "name": "Echo Pulse",
       "artist": "Luna Vale",
-      "cover": "../backend/assets/covers/cover_38.jpg",
-      "sound": "../backend/assets/sounds/38_click.wav"
+      "cover": "http://localhost:3001/covers/cover_38.jpg",
+      "sound": "http://localhost:3001/songs/38_click.wav"
     },
     {
       "id": 39,
       "name": "Sonic Thread",
       "artist": "Kalen Moth",
-      "cover": "../backend/assets/covers/cover_39.jpg",
-      "sound": "../backend/assets/sounds/39_chime.wav"
+      "cover": "http://localhost:3001/covers/cover_39.jpg",
+      "sound": "http://localhost:3001/songs/39_chime.wav"
     },
     {
       "id": 40,
       "name": "Micro Chime",
       "artist": "Eli Frost",
-      "cover": "../backend/assets/covers/cover_40.jpg",
-      "sound": "../backend/assets/sounds/40_beep.wav"
+      "cover": "http://localhost:3001/covers/cover_40.jpg",
+      "sound": "http://localhost:3001/songs/40_beep.wav"
     },
     {
       "id": 41,
       "name": "Neon Echo",
       "artist": "Rin Sol",
-      "cover": "../backend/assets/covers/cover_41.jpg",
-      "sound": "../backend/assets/sounds/41_click.wav"
+      "cover": "http://localhost:3001/covers/cover_41.jpg",
+      "sound": "http://localhost:3001/songs/41_click.wav"
     },
     {
       "id": 42,
       "name": "Digital Veins",
       "artist": "Nova Reed",
-      "cover": "../backend/assets/covers/cover_42.jpg",
-      "sound": "../backend/assets/sounds/42_chime.wav"
+      "cover": "http://localhost:3001/covers/cover_42.jpg",
+      "sound": "http://localhost:3001/songs/42_chime.wav"
     },
     {
       "id": 43,
       "name": "Soft Signal",
       "artist": "Lyra Skye",
-      "cover": "../backend/assets/covers/cover_43.jpg",
-      "sound": "../backend/assets/sounds/43_beep.wav"
+      "cover": "http://localhost:3001/covers/cover_43.jpg",
+      "sound": "http://localhost:3001/songs/43_beep.wav"
     },
     {
       "id": 44,
       "name": "Rhythm Loop",
       "artist": "Orion Vega",
-      "cover": "../backend/assets/covers/cover_44.jpg",
-      "sound": "../backend/assets/sounds/44_click.wav"
+      "cover": "http://localhost:3001/covers/cover_44.jpg",
+      "sound": "http://localhost:3001/songs/44_click.wav"
     },
     {
       "id": 45,
       "name": "Tone Mirage",
       "artist": "Caden Frost",
-      "cover": "../backend/assets/covers/cover_45.jpg",
-      "sound": "../backend/assets/sounds/45_chime.wav"
+      "cover": "http://localhost:3001/covers/cover_45.jpg",
+      "sound": "http://localhost:3001/songs/45_chime.wav"
     },
     {
       "id": 46,
       "name": "Glass Frequency",
       "artist": "Ari Vox",
-      "cover": "../backend/assets/covers/cover_46.jpg",
-      "sound": "../backend/assets/sounds/46_beep.wav"
+      "cover": "http://localhost:3001/covers/cover_46.jpg",
+      "sound": "http://localhost:3001/songs/46_beep.wav"
     },
     {
       "id": 47,
       "name": "Electric Chime",
       "artist": "Eira Moon",
-      "cover": "../backend/assets/covers/cover_47.jpg",
-      "sound": "../backend/assets/sounds/47_click.wav"
+      "cover": "http://localhost:3001/covers/cover_47.jpg",
+      "sound": "http://localhost:3001/songs/47_click.wav"
     },
     {
       "id": 48,
       "name": "Ambient Drift",
       "artist": "Vira Lyn",
-      "cover": "../backend/assets/covers/cover_48.jpg",
-      "sound": "../backend/assets/sounds/48_chime.wav"
+      "cover": "http://localhost:3001/covers/cover_48.jpg",
+      "sound": "http://localhost:3001/songs/48_chime.wav"
     },
     {
       "id": 49,
       "name": "Lofi Circuit",
       "artist": "Sera Lynx",
-      "cover": "../backend/assets/covers/cover_49.jpg",
-      "sound": "../backend/assets/sounds/49_beep.wav"
+      "cover": "http://localhost:3001/covers/cover_49.jpg",
+      "sound": "http://localhost:3001/songs/49_beep.wav"
     },
     {
       "id": 50,
       "name": "Quantum Beat",
       "artist": "Atlas Ray",
-      "cover": "../backend/assets/covers/cover_50.jpg",
-      "sound": "../backend/assets/sounds/50_click.wav"
+      "cover": "http://localhost:3001/covers/cover_50.jpg",
+      "sound": "http://localhost:3001/songs/50_click.wav"
     }
   ]
 }
