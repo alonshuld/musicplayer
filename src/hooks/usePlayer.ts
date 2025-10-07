@@ -60,7 +60,6 @@ export const usePlayer = () => {
 
         // Handle repeat all
         if (prev.queue.length === 0 && prev.repeatMode === "all" && prev.allSongs.length > 0) {
-          // Restart the entire playlist
           const [nextSong, ...rest] = prev.allSongs;
           return {
             ...prev,
@@ -162,7 +161,6 @@ export const usePlayer = () => {
     setState((prev) => {
       const isSameSong = prev.current?.id === song.id;
 
-      // If playing the same song, restart it immediately
       if (isSameSong && audio) {
         audio.currentTime = 0;
         if (audio.paused) {
@@ -187,7 +185,6 @@ export const usePlayer = () => {
   const togglePlay = useCallback(() => {
     setState((prev) => {
       if (!prev.current) {
-        // If no current song but queue exists, start playing the first song
         if (prev.queue.length === 0) return prev;
         const [nextSong, ...rest] = prev.queue;
         return {
@@ -222,7 +219,6 @@ export const usePlayer = () => {
   const previous = useCallback(() => {
     setState((prev) => {
       if (prev.history.length === 0) {
-        // Restart current song
         if (audioRef.current) {
           audioRef.current.currentTime = 0;
         }
@@ -250,6 +246,13 @@ export const usePlayer = () => {
     }));
   }, []);
 
+  const removeFromQueue = useCallback((songId: number) => {
+    setState((prev) => ({
+      ...prev,
+      queue: prev.queue.filter((song) => song.id !== songId),
+    }));
+  }, []);
+
   const seek = useCallback((time: number) => {
     if (audioRef.current) {
       audioRef.current.currentTime = time;
@@ -264,7 +267,6 @@ export const usePlayer = () => {
   const shuffle = useCallback(() => {
     setState((prev) => {
       if (prev.isShuffled) {
-        // unShuffle: restore original order, but only for remaining songs
         const remainingSongIds = new Set(prev.queue.map((s) => s.id));
         const unShuffled = originalQueueRef.current.filter((s) =>
           remainingSongIds.has(s.id)
@@ -275,7 +277,6 @@ export const usePlayer = () => {
           isShuffled: false,
         };
       } else {
-        // Shuffle: save original order and randomize
         originalQueueRef.current = [...prev.queue];
         const shuffled = [...prev.queue].sort(() => Math.random() - 0.5);
         return {
@@ -306,6 +307,7 @@ export const usePlayer = () => {
     previous,
     togglePlay,
     addToQueue,
+    removeFromQueue,
     seek,
     setVolume,
     shuffle,
