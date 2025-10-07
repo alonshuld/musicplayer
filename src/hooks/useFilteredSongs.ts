@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { type Song } from "../types/Song"; // adjust the path if you already have Song defined elsewhere
+import { type Song } from "../types/Song";
 
 export function useFilteredSongs(songs: Song[] | undefined, searchTerm: string) {
   return useMemo(() => {
