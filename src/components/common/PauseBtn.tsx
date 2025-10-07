@@ -9,7 +9,7 @@ export interface PauseBtnProps {
 
 export const PauseBtn: FC<PauseBtnProps> = ({ isPlaying, togglePlay }) => {
   return (
-    <IconButton onClick={togglePlay} sx={{ p: 0 }}>
+    <IconButton onClick={togglePlay}>
       {isPlaying ? <PauseRounded /> : <PlayArrowRounded />}
     </IconButton>
   );
