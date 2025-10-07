@@ -22,7 +22,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   seek,
 }) => {
   return (
-    <Box width={500} sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+    <Box width={500} sx={{ display: "flex", gap: 1.5, alignItems: "center" }}>
       {formatTime(progress)}
 
       <Slider
