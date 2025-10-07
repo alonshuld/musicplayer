@@ -1,6 +1,7 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
 import { Box, CircularProgress } from "@mui/material";
+
 import { Header } from "./components/common/Header";
 import { Logo } from "./components/common/Logo";
 import { Footer } from "./components/common/Footer";
@@ -12,12 +13,14 @@ import { PlayBtn } from "./components/common/PlayBtn";
 import { Volume } from "./components/common/Volume";
 import { ProgressBar } from "./components/common/ProgressBar";
 import { PlaybackControl } from "./components/common/PlaybackControl";
+import { AddToQueueBtn } from "./components/common/AddToQueueBtn";
+import { ShuffleBtn } from "./components/common/ShuffleBtn";
+import { RepeatBtn } from "./components/common/RepeatBtn";
+
 import { useSongs } from "./hooks/useSongs";
 import { type Song, usePlayer } from "./hooks/usePlayer";
 
 import "./App.css";
-import { AddToQueueBtn } from "./components/common/AddToQueueBtn";
-import { ShuffleBtn } from "./components/common/ShuffleBtn";
 
 const theme = createTheme({
   components: {
@@ -98,6 +101,8 @@ function App() {
     duration,
     isShuffled,
     shuffle,
+    repeatMode,
+    repeat,
   } = usePlayer();
   const { data: songs, isLoading, error } = useSongs();
 
@@ -207,7 +212,11 @@ function App() {
               isShuffled={isShuffled}
               shuffle={shuffle}
             />,
-            <div key={"TempRepeat"}>repeat</div>,
+            <RepeatBtn
+              key={"Repeat"}
+              repeatMode={repeatMode}
+              repeat={repeat}
+            />,
           ]}
         />
       </Box>

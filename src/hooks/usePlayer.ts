@@ -17,6 +17,8 @@ export interface PlayerState {
   progress: number;
   duration: number;
   isShuffled: boolean;
+  repeatMode: "off" | "all" | "one";
+  allSongs: Song[];
 }
 
 export const usePlayer = () => {
@@ -29,6 +31,8 @@ export const usePlayer = () => {
     progress: 0,
     duration: 0,
     isShuffled: false,
+    repeatMode: "off",
+    allSongs: [],
   });
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -46,9 +50,32 @@ export const usePlayer = () => {
 
     const handleEnded = () => {
       setState((prev) => {
+        // Handle repeat one
+        if (prev.repeatMode === "one" && prev.current) {
+          if (audio) {
+            audio.currentTime = 0;
+          }
+          return prev;
+        }
+
+        // Handle repeat all
+        if (prev.queue.length === 0 && prev.repeatMode === "all" && prev.allSongs.length > 0) {
+          // Restart the entire playlist
+          const [nextSong, ...rest] = prev.allSongs;
+          return {
+            ...prev,
+            history: prev.current ? [prev.current, ...prev.history] : prev.history,
+            current: nextSong,
+            queue: rest,
+            progress: 0,
+          };
+        }
+
+        // Normal playback or no repeat
         if (prev.queue.length === 0) {
           return { ...prev, isPlaying: false };
         }
+
         const [nextSong, ...rest] = prev.queue;
         return {
           ...prev,
@@ -217,6 +244,9 @@ export const usePlayer = () => {
     setState((prev) => ({
       ...prev,
       queue: [...prev.queue, song],
+      allSongs: prev.allSongs.some(s => s.id === song.id)
+        ? prev.allSongs
+        : [...prev.allSongs, song],
     }));
   }, []);
 
@@ -257,6 +287,18 @@ export const usePlayer = () => {
     });
   }, []);
 
+  const repeat = useCallback(() => {
+    setState((prev) => {
+      const modes: Array<"off" | "all" | "one"> = ["off", "all", "one"];
+      const currentIndex = modes.indexOf(prev.repeatMode);
+      const nextMode = modes[(currentIndex + 1) % modes.length];
+      return {
+        ...prev,
+        repeatMode: nextMode,
+      };
+    });
+  }, []);
+
   return {
     ...state,
     play,
@@ -267,5 +309,6 @@ export const usePlayer = () => {
     seek,
     setVolume,
     shuffle,
+    repeat,
   };
 };
