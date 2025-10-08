@@ -15,6 +15,7 @@ export const SongCover: React.FC<SongCoverProps> = ({
 }) => {
   const [hovered, setHovered] = useState(false);
   const [layout, setLayout] = useState<"full" | "compact">("full");
+
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -46,7 +47,6 @@ export const SongCover: React.FC<SongCoverProps> = ({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Cover image */}
       <Box sx={{ position: "relative", flexShrink: 0 }}>
         <img
           src={cover}
@@ -79,7 +79,6 @@ export const SongCover: React.FC<SongCoverProps> = ({
         )}
       </Box>
 
-      {/* Song info */}
       <Box
         sx={{
           display: "flex",

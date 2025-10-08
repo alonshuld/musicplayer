@@ -18,7 +18,6 @@ import { PlaybackControl } from "./components/common/PlaybackControl";
 import { AddToQueueBtn } from "./components/common/AddToQueueBtn";
 import { ShuffleBtn } from "./components/common/ShuffleBtn";
 import { RepeatBtn } from "./components/common/RepeatBtn";
-import { RemoveFromQueueBtn } from "./components/common/RemoveFromQueueBtn";
 
 import { useSongs } from "./hooks/useSongs";
 import { usePlayer } from "./hooks/usePlayer";
@@ -109,6 +108,7 @@ function App() {
     repeatMode,
     repeat,
     removeFromQueue,
+    setQueue,
   } = usePlayer();
   const { data: songs, isLoading, error } = useSongs();
   const [searchTerm, setSearchTerm] = useState("");
@@ -139,21 +139,9 @@ function App() {
           <QueueDrawer
             showQueue={showQueue}
             setShowQueue={setShowQueue}
-            items={queue.map((song: Song) => (
-              <SongCover
-                key={song.id}
-                name={song.name}
-                artist={song.artist}
-                cover={song.cover}
-                buttons={[
-                  <RemoveFromQueueBtn
-                    key={"RemoveFromQueueBtn"}
-                    songId={song.id}
-                    removeFromQueue={removeFromQueue}
-                  />,
-                ]}
-              />
-            ))}
+            queue={queue}
+            removeFromQueue={removeFromQueue}
+            setQueue={setQueue}
           />
 
           <Box

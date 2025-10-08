@@ -1,19 +1,45 @@
-import { type FC, type ReactNode } from "react";
-import { Drawer, Box } from "@mui/material";
+import { type FC } from "react";
+import { Drawer } from "@mui/material";
+
+import { DndContext, closestCorners, type DragEndEvent } from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  arrayMove,
+} from "@dnd-kit/sortable";
+
+import type { Song } from "../../types/Song";
+import { QueueSongCover } from "./QueueSongCover";
 
 export interface QueueDrawerProps {
   showQueue: boolean;
   setShowQueue: (showQueue: boolean) => void;
-  items?: ReactNode[];
+  removeFromQueue: (songId: number) => void;
+  queue: Song[];
+  setQueue: (newQueue: Song[]) => void;
 }
 
 const QueueDrawerWidth = 240;
 
 export const QueueDrawer: FC<QueueDrawerProps> = ({
-  items,
+  queue,
   showQueue,
   setShowQueue,
+  removeFromQueue,
+  setQueue,
 }) => {
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = queue.findIndex((song) => song.id === active.id);
+    const newIndex = queue.findIndex((song) => song.id === over.id);
+
+    const newQueue = arrayMove(queue, oldIndex, newIndex);
+    setQueue(newQueue);
+  };
+
   return (
     <Drawer
       variant="persistent"
@@ -24,7 +50,7 @@ export const QueueDrawer: FC<QueueDrawerProps> = ({
         paper: {
           sx: {
             width: QueueDrawerWidth,
-            position: "fix",
+            position: "relative",
             borderRadius: "16px",
             zIndex: 0,
           },
@@ -43,19 +69,20 @@ export const QueueDrawer: FC<QueueDrawerProps> = ({
         },
       }}
     >
-      {items?.map((item) => (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            px: 2,
-            pt: 2,
-            height: 64,
-          }}
+      <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
+        <SortableContext
+          items={queue.map((s) => s.id)}
+          strategy={verticalListSortingStrategy}
         >
-          {item}
-        </Box>
-      ))}
+          {queue.map((song) => (
+            <QueueSongCover
+              key={song.id}
+              song={song}
+              removeFromQueue={removeFromQueue}
+            />
+          ))}
+        </SortableContext>
+      </DndContext>
     </Drawer>
   );
 };
