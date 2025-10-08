@@ -232,9 +232,13 @@ export const usePlayer = () => {
     setState((prev) => ({
       ...prev,
       queue: [...prev.queue, song],
-      allSongs: prev.allSongs.some(s => s.id === song.id)
-        ? prev.allSongs
-        : [...prev.allSongs, song],
+    }));
+  }, []);
+
+  const setQueue = useCallback((newQueue: Song[]) => {
+    setState((prev) => ({
+      ...prev,
+      queue: newQueue
     }));
   }, []);
 
@@ -304,5 +308,6 @@ export const usePlayer = () => {
     setVolume,
     shuffle,
     repeat,
+    setQueue,
   };
 };
