@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { type Song } from "../types/Song";
+
 export interface PlayerState {
   current: Song | null;
   queue: Song[];
@@ -31,7 +32,7 @@ export const usePlayer = () => {
   const currentSongRef = useRef<string | null>(null);
   const originalQueueRef = useRef<Song[]>([]);
 
-  // Initialize audio element once
+  // Initialize audio
   useEffect(() => {
     if (!audioRef.current) {
       audioRef.current = new Audio();
@@ -42,54 +43,69 @@ export const usePlayer = () => {
 
     const handleEnded = () => {
       setState((prev) => {
-        // Handle repeat one
+        const audio = audioRef.current;
+
+        // Repeat one
         if (prev.repeatMode === "one" && prev.current) {
           if (audio) {
             audio.currentTime = 0;
+            audio.play().catch((err) => console.error("Playback failed:", err));
           }
-          return prev;
+          return { ...prev, isPlaying: true, progress: 0 };
         }
 
-        // Handle repeat all
+        // Repeat all
         if (prev.queue.length === 0 && prev.repeatMode === "all" && prev.allSongs.length > 0) {
-          const [nextSong, ...rest] = prev.allSongs;
+          const [firstSong, ...rest] = prev.allSongs;
+          if (audio) {
+            audio.src = firstSong.sound;
+            audio.load();
+            audio.play().catch((err) => console.error("Playback failed:", err));
+          }
           return {
             ...prev,
-            history: prev.current ? [prev.current, ...prev.history] : prev.history,
-            current: nextSong,
+            current: firstSong,
             queue: rest,
+            history: [],
+            isPlaying: true,
             progress: 0,
           };
         }
 
-        // Normal playback or no repeat
+        // Stop if nothing left
         if (prev.queue.length === 0) {
+          if (audio) {
+            audio.pause();
+            audio.currentTime = 0;
+          }
           return { ...prev, isPlaying: false };
         }
 
+        // Normal next
         const [nextSong, ...rest] = prev.queue;
+        if (audio) {
+          audio.src = nextSong.sound;
+          audio.load();
+          audio.play().catch((err) => console.error("Playback failed:", err));
+        }
+
         return {
           ...prev,
           history: prev.current ? [prev.current, ...prev.history] : prev.history,
           current: nextSong,
           queue: rest,
+          isPlaying: true,
           progress: 0,
         };
       });
     };
 
     const handleTimeUpdate = () => {
-      setState((prev) => ({
-        ...prev,
-        progress: audio.currentTime,
-      }));
+      setState((prev) => ({ ...prev, progress: audio.currentTime }));
     };
 
     const handleLoadedMetadata = () => {
-      setState((prev) => ({
-        ...prev,
-        duration: audio.duration || 0,
-      }));
+      setState((prev) => ({ ...prev, duration: audio.duration || 0 }));
     };
 
     audio.addEventListener("ended", handleEnded);
@@ -105,7 +121,7 @@ export const usePlayer = () => {
     };
   }, []);
 
-  // Sync audio source when current song changes
+  // Sync new song source
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !state.current) return;
@@ -123,9 +139,9 @@ export const usePlayer = () => {
         });
       }
     }
-  }, [state, state.isPlaying]);
+  }, [state.current, state.isPlaying]);
 
-  // Sync play/pause state
+  // Sync play/pause
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !state.current) return;
@@ -138,7 +154,7 @@ export const usePlayer = () => {
     } else if (!state.isPlaying && !audio.paused) {
       audio.pause();
     }
-  }, [state, state.isPlaying]);
+  }, [state.isPlaying, state.current]);
 
   // Sync volume
   useEffect(() => {
@@ -147,19 +163,22 @@ export const usePlayer = () => {
     }
   }, [state.volume]);
 
+  // Keep allSongs synced with queue
+  useEffect(() => {
+    setState((prev) => ({
+      ...prev,
+      allSongs: prev.allSongs.length === 0 ? prev.queue : prev.allSongs,
+    }));
+  }, [state.queue]);
+
   const play = useCallback((song: Song) => {
     const audio = audioRef.current;
 
     setState((prev) => {
       const isSameSong = prev.current?.id === song.id;
-
       if (isSameSong && audio) {
         audio.currentTime = 0;
-        if (audio.paused) {
-          audio.play().catch((err) => {
-            console.error("Playback failed:", err);
-          });
-        }
+        if (audio.paused) audio.play().catch(console.error);
       }
 
       return {
@@ -167,9 +186,7 @@ export const usePlayer = () => {
         current: song,
         isPlaying: true,
         progress: 0,
-        history: isSameSong || !prev.current
-          ? prev.history
-          : [prev.current, ...prev.history],
+        history: isSameSong || !prev.current ? prev.history : [prev.current, ...prev.history],
       };
     });
   }, []);
@@ -179,13 +196,7 @@ export const usePlayer = () => {
       if (!prev.current) {
         if (prev.queue.length === 0) return prev;
         const [nextSong, ...rest] = prev.queue;
-        return {
-          ...prev,
-          current: nextSong,
-          queue: rest,
-          isPlaying: true,
-          progress: 0,
-        };
+        return { ...prev, current: nextSong, queue: rest, isPlaying: true, progress: 0 };
       }
       return { ...prev, isPlaying: !prev.isPlaying };
     });
@@ -193,10 +204,44 @@ export const usePlayer = () => {
 
   const next = useCallback(() => {
     setState((prev) => {
+      const audio = audioRef.current;
+
+      // Repeat one
+      if (prev.repeatMode === "one" && prev.current) {
+        if (audio) {
+          audio.currentTime = 0;
+          audio.play().catch(console.error);
+        }
+        return { ...prev, isPlaying: true, progress: 0 };
+      }
+
+      // Repeat all
+      if (prev.queue.length === 0 && prev.repeatMode === "all" && prev.allSongs.length > 0) {
+        const [firstSong, ...rest] = prev.allSongs;
+        if (audio) {
+          audio.src = firstSong.sound;
+          audio.load();
+          audio.play().catch(console.error);
+        }
+        return { ...prev, current: firstSong, queue: rest, history: [], isPlaying: true, progress: 0 };
+      }
+
+      // No next song
       if (prev.queue.length === 0) {
+        if (audio) {
+          audio.pause();
+          audio.currentTime = 0;
+        }
         return { ...prev, isPlaying: false, current: null, progress: 0 };
       }
+
+      // Normal case
       const [nextSong, ...rest] = prev.queue;
+      if (audio) {
+        audio.src = nextSong.sound;
+        audio.load();
+        audio.play().catch(console.error);
+      }
       return {
         ...prev,
         history: prev.current ? [prev.current, ...prev.history] : prev.history,
@@ -210,13 +255,17 @@ export const usePlayer = () => {
 
   const previous = useCallback(() => {
     setState((prev) => {
+      const audio = audioRef.current;
       if (prev.history.length === 0) {
-        if (audioRef.current) {
-          audioRef.current.currentTime = 0;
-        }
+        if (audio) audio.currentTime = 0;
         return { ...prev, progress: 0 };
       }
       const [lastSong, ...rest] = prev.history;
+      if (audio) {
+        audio.src = lastSong.sound;
+        audio.load();
+        audio.play().catch(console.error);
+      }
       return {
         ...prev,
         history: rest,
@@ -229,35 +278,31 @@ export const usePlayer = () => {
   }, []);
 
   const addToQueue = useCallback((song: Song) => {
-  setState((prev) => {
-    const alreadyInQueue = prev.queue.some((s) => s.id === song.id);
-    if (alreadyInQueue) return prev;
-
-    return {
-      ...prev,
-      queue: [...prev.queue, song],
-    };
-  });
-}, []);
+    setState((prev) => {
+      const alreadyInQueue = prev.queue.some((s) => s.id === song.id);
+      if (alreadyInQueue) return prev;
+      return { ...prev, queue: [...prev.queue, song], allSongs: [...prev.allSongs, song] };
+    });
+  }, []);
 
   const setQueue = useCallback((newQueue: Song[]) => {
-    setState((prev) => ({
-      ...prev,
-      queue: newQueue
-    }));
+    setState((prev) => ({ ...prev, queue: newQueue, allSongs: newQueue }));
   }, []);
 
   const removeFromQueue = useCallback((songId: number) => {
-    setState((prev) => ({
-      ...prev,
-      queue: prev.queue.filter((song) => song.id !== songId),
-    }));
+    setState((prev) => {
+      const isCurrent = prev.current?.id === songId;
+      const newQueue = prev.queue.filter((song) => song.id !== songId);
+      return {
+        ...prev,
+        queue: newQueue,
+        ...(isCurrent ? { current: null, isPlaying: false, progress: 0 } : {}),
+      };
+    });
   }, []);
 
   const seek = useCallback((time: number) => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = time;
-    }
+    if (audioRef.current) audioRef.current.currentTime = time;
     setState((prev) => ({ ...prev, progress: time }));
   }, []);
 
@@ -268,23 +313,13 @@ export const usePlayer = () => {
   const shuffle = useCallback(() => {
     setState((prev) => {
       if (prev.isShuffled) {
-        const remainingSongIds = new Set(prev.queue.map((s) => s.id));
-        const unShuffled = originalQueueRef.current.filter((s) =>
-          remainingSongIds.has(s.id)
-        );
-        return {
-          ...prev,
-          queue: unShuffled,
-          isShuffled: false,
-        };
+        const remainingIds = new Set(prev.queue.map((s) => s.id));
+        const unShuffled = originalQueueRef.current.filter((s) => remainingIds.has(s.id));
+        return { ...prev, queue: unShuffled, isShuffled: false };
       } else {
         originalQueueRef.current = [...prev.queue];
         const shuffled = [...prev.queue].sort(() => Math.random() - 0.5);
-        return {
-          ...prev,
-          queue: shuffled,
-          isShuffled: true,
-        };
+        return { ...prev, queue: shuffled, isShuffled: true };
       }
     });
   }, []);
@@ -292,12 +327,8 @@ export const usePlayer = () => {
   const repeat = useCallback(() => {
     setState((prev) => {
       const modes: Array<"off" | "all" | "one"> = ["off", "all", "one"];
-      const currentIndex = modes.indexOf(prev.repeatMode);
-      const nextMode = modes[(currentIndex + 1) % modes.length];
-      return {
-        ...prev,
-        repeatMode: nextMode,
-      };
+      const nextMode = modes[(modes.indexOf(prev.repeatMode) + 1) % modes.length];
+      return { ...prev, repeatMode: nextMode };
     });
   }, []);
 
