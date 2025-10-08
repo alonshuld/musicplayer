@@ -229,11 +229,16 @@ export const usePlayer = () => {
   }, []);
 
   const addToQueue = useCallback((song: Song) => {
-    setState((prev) => ({
+  setState((prev) => {
+    const alreadyInQueue = prev.queue.some((s) => s.id === song.id);
+    if (alreadyInQueue) return prev;
+
+    return {
       ...prev,
       queue: [...prev.queue, song],
-    }));
-  }, []);
+    };
+  });
+}, []);
 
   const setQueue = useCallback((newQueue: Song[]) => {
     setState((prev) => ({
