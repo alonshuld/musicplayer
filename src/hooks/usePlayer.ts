@@ -11,7 +11,6 @@ export interface PlayerState {
   duration: number;
   isShuffled: boolean;
   repeatMode: "off" | "all" | "one";
-  allSongs: Song[];
 }
 
 export const usePlayer = () => {
@@ -25,79 +24,86 @@ export const usePlayer = () => {
     duration: 0,
     isShuffled: false,
     repeatMode: "off",
-    allSongs: [],
   });
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const currentSongRef = useRef<string | null>(null);
+  const currentSongIdRef = useRef<number | null>(null);
+  const isPlayingRef = useRef(false);
+
+  // Store original queue order for shuffle/unshuffle
   const originalQueueRef = useRef<Song[]>([]);
 
-  // Initialize audio
+  // Keep refs in sync
+  useEffect(() => {
+    isPlayingRef.current = state.isPlaying;
+  }, [state.isPlaying]);
+
+  // Handle song end (for ended event)
+  const handleSongEnd = useCallback(() => {
+    setState((prev) => {
+      const audio = audioRef.current;
+      if (!audio) return prev;
+
+      // Repeat one: replay current song
+      if (prev.repeatMode === "one" && prev.current) {
+        audio.currentTime = 0;
+        audio.play().catch((err) => console.error("Playback failed:", err));
+        return { ...prev, isPlaying: true, progress: 0 };
+      }
+
+      let nextSong: Song | undefined;
+      const newQueue = [...prev.queue];
+      let newHistory = prev.history;
+
+      // Unified next-song logic for queue > 0 or (queue == 0 with repeat-all)
+      if (prev.queue.length > 0 || (prev.repeatMode === "all" && prev.current)) {
+        if (prev.queue.length > 0) {
+          nextSong = newQueue.shift()!;
+        } else {
+          nextSong = prev.current!;
+        }
+
+        if (prev.current) {
+          newHistory = [prev.current, ...newHistory];
+        }
+
+        if (prev.repeatMode === "all" && prev.current) {
+          newQueue.push(prev.current);
+        }
+
+        currentSongIdRef.current = nextSong.id;
+        audio.src = nextSong.sound;
+        audio.load();
+
+        return {
+          ...prev,
+          current: nextSong,
+          queue: newQueue,
+          history: newHistory,
+          isPlaying: true,
+          progress: 0,
+        };
+      }
+
+      // No more songs - stop, keep current, reset progress
+      audio.pause();
+      audio.currentTime = 0;
+      return { ...prev, isPlaying: false, progress: 0 };
+    });
+  }, []);
+
+  // Initialize audio element
   useEffect(() => {
     if (!audioRef.current) {
-      audioRef.current = new Audio();
-      audioRef.current.volume = 0.5;
+      const audio = new Audio();
+      audio.volume = 0.5;
+      audioRef.current = audio;
     }
 
     const audio = audioRef.current;
 
     const handleEnded = () => {
-      setState((prev) => {
-        const audio = audioRef.current;
-
-        // Repeat one
-        if (prev.repeatMode === "one" && prev.current) {
-          if (audio) {
-            audio.currentTime = 0;
-            audio.play().catch((err) => console.error("Playback failed:", err));
-          }
-          return { ...prev, isPlaying: true, progress: 0 };
-        }
-
-        // Repeat all
-        if (prev.queue.length === 0 && prev.repeatMode === "all" && prev.allSongs.length > 0) {
-          const [firstSong, ...rest] = prev.allSongs;
-          if (audio) {
-            audio.src = firstSong.sound;
-            audio.load();
-            audio.play().catch((err) => console.error("Playback failed:", err));
-          }
-          return {
-            ...prev,
-            current: firstSong,
-            queue: rest,
-            history: [],
-            isPlaying: true,
-            progress: 0,
-          };
-        }
-
-        // Stop if nothing left
-        if (prev.queue.length === 0) {
-          if (audio) {
-            audio.pause();
-            audio.currentTime = 0;
-          }
-          return { ...prev, isPlaying: false };
-        }
-
-        // Normal next
-        const [nextSong, ...rest] = prev.queue;
-        if (audio) {
-          audio.src = nextSong.sound;
-          audio.load();
-          audio.play().catch((err) => console.error("Playback failed:", err));
-        }
-
-        return {
-          ...prev,
-          history: prev.current ? [prev.current, ...prev.history] : prev.history,
-          current: nextSong,
-          queue: rest,
-          isPlaying: true,
-          progress: 0,
-        };
-      });
+      handleSongEnd();
     };
 
     const handleTimeUpdate = () => {
@@ -108,242 +114,457 @@ export const usePlayer = () => {
       setState((prev) => ({ ...prev, duration: audio.duration || 0 }));
     };
 
+    const handleError = (e: Event) => {
+      console.error("Audio playback error:", e);
+      setState((prev) => ({ ...prev, isPlaying: false }));
+    };
+
+    const handleCanPlay = () => {
+      // Auto-play when ready if isPlaying is true
+      if (isPlayingRef.current && audio.paused) {
+        audio.play().catch((err) => {
+          console.error("Playback failed on canplay:", err);
+          setState((prev) => ({ ...prev, isPlaying: false }));
+        });
+      }
+    };
+
     audio.addEventListener("ended", handleEnded);
     audio.addEventListener("timeupdate", handleTimeUpdate);
     audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+    audio.addEventListener("error", handleError);
+    audio.addEventListener("canplay", handleCanPlay);
 
     return () => {
       audio.removeEventListener("ended", handleEnded);
       audio.removeEventListener("timeupdate", handleTimeUpdate);
       audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      audio.removeEventListener("error", handleError);
+      audio.removeEventListener("canplay", handleCanPlay);
       audio.pause();
       audio.src = "";
     };
-  }, []);
+  }, [handleSongEnd]);
 
-  // Sync new song source
+  // Sync audio source when current song changes
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !state.current) return;
 
-    const newSrc = state.current.sound;
-    if (currentSongRef.current !== newSrc) {
-      currentSongRef.current = newSrc;
-      audio.src = newSrc;
+    // Only load if the song ID actually changed
+    if (currentSongIdRef.current !== state.current.id) {
+      currentSongIdRef.current = state.current.id;
+      audio.src = state.current.sound;
       audio.load();
+    }
+  }, [state]);
 
-      if (state.isPlaying) {
+  // Sync play/pause state
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !state.current) return;
+
+    if (state.isPlaying) {
+      if (audio.paused) {
         audio.play().catch((err) => {
           console.error("Playback failed:", err);
           setState((prev) => ({ ...prev, isPlaying: false }));
         });
       }
+    } else {
+      if (!audio.paused) {
+        audio.pause();
+      }
     }
-  }, [state.current, state.isPlaying]);
-
-  // Sync play/pause
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio || !state.current) return;
-
-    if (state.isPlaying && audio.paused) {
-      audio.play().catch((err) => {
-        console.error("Playback failed:", err);
-        setState((prev) => ({ ...prev, isPlaying: false }));
-      });
-    } else if (!state.isPlaying && !audio.paused) {
-      audio.pause();
-    }
-  }, [state.isPlaying, state.current]);
+  }, [state.isPlaying, state]);
 
   // Sync volume
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.volume = state.volume;
+      audioRef.current.volume = Math.max(0, Math.min(1, state.volume));
     }
   }, [state.volume]);
 
-  // Keep allSongs synced with queue
-  useEffect(() => {
-    setState((prev) => ({
-      ...prev,
-      allSongs: prev.allSongs.length === 0 ? prev.queue : prev.allSongs,
-    }));
-  }, [state.queue]);
-
+  /**
+   * Play a specific song immediately
+   */
   const play = useCallback((song: Song) => {
     const audio = audioRef.current;
+    if (!audio) return;
 
     setState((prev) => {
       const isSameSong = prev.current?.id === song.id;
-      if (isSameSong && audio) {
+
+      // If same song, just restart it
+      if (isSameSong) {
         audio.currentTime = 0;
-        if (audio.paused) audio.play().catch(console.error);
-      }
-
-      return {
-        ...prev,
-        current: song,
-        isPlaying: true,
-        progress: 0,
-        history: isSameSong || !prev.current ? prev.history : [prev.current, ...prev.history],
-      };
-    });
-  }, []);
-
-  const togglePlay = useCallback(() => {
-    setState((prev) => {
-      if (!prev.current) {
-        if (prev.queue.length === 0) return prev;
-        const [nextSong, ...rest] = prev.queue;
-        return { ...prev, current: nextSong, queue: rest, isPlaying: true, progress: 0 };
-      }
-      return { ...prev, isPlaying: !prev.isPlaying };
-    });
-  }, []);
-
-  const next = useCallback(() => {
-    setState((prev) => {
-      const audio = audioRef.current;
-
-      // Repeat one
-      if (prev.repeatMode === "one" && prev.current) {
-        if (audio) {
-          audio.currentTime = 0;
-          audio.play().catch(console.error);
+        if (audio.paused) {
+          audio.play().catch((err) => console.error("Playback failed:", err));
         }
         return { ...prev, isPlaying: true, progress: 0 };
       }
 
-      // Repeat all
-      if (prev.queue.length === 0 && prev.repeatMode === "all" && prev.allSongs.length > 0) {
-        const [firstSong, ...rest] = prev.allSongs;
-        if (audio) {
-          audio.src = firstSong.sound;
-          audio.load();
-          audio.play().catch(console.error);
-        }
-        return { ...prev, current: firstSong, queue: rest, history: [], isPlaying: true, progress: 0 };
+      // Check if song is in queue, remove it to avoid duplicates
+      const newQueue = [...prev.queue];
+      const queueIndex = newQueue.findIndex((s) => s.id === song.id);
+      if (queueIndex !== -1) {
+        newQueue.splice(queueIndex, 1);
       }
 
-      // No next song
-      if (prev.queue.length === 0) {
-        if (audio) {
-          audio.pause();
-          audio.currentTime = 0;
-        }
-        return { ...prev, isPlaying: false, current: null, progress: 0 };
+      // If shuffled, also remove from original queue
+      if (prev.isShuffled && queueIndex !== -1) {
+        originalQueueRef.current = originalQueueRef.current.filter((s) => s.id !== song.id);
       }
 
-      // Normal case
-      const [nextSong, ...rest] = prev.queue;
-      if (audio) {
-        audio.src = nextSong.sound;
-        audio.load();
-        audio.play().catch(console.error);
-      }
+      // Load and play new song
+      currentSongIdRef.current = song.id;
+      audio.src = song.sound;
+      audio.load();
+
+      const newHistory = prev.current ? [prev.current, ...prev.history] : prev.history;
+
       return {
         ...prev,
-        history: prev.current ? [prev.current, ...prev.history] : prev.history,
-        current: nextSong,
-        queue: rest,
+        current: song,
+        queue: newQueue,
+        history: newHistory,
         isPlaying: true,
         progress: 0,
+        duration: 0,
       };
     });
   }, []);
 
-  const previous = useCallback(() => {
+  /**
+   * Toggle play/pause
+   */
+  const togglePlay = useCallback(() => {
     setState((prev) => {
       const audio = audioRef.current;
-      if (prev.history.length === 0) {
-        if (audio) audio.currentTime = 0;
+
+      // If no current song, start playing from queue
+      if (!prev.current) {
+        if (prev.queue.length === 0) return prev;
+
+        const [nextSong, ...restQueue] = prev.queue;
+
+        if (audio) {
+          currentSongIdRef.current = nextSong.id;
+          audio.src = nextSong.sound;
+          audio.load();
+        }
+
+        return {
+          ...prev,
+          current: nextSong,
+          queue: restQueue,
+          isPlaying: true,
+          progress: 0,
+          duration: 0,
+        };
+      }
+
+      // Toggle current song
+      return { ...prev, isPlaying: !prev.isPlaying };
+    });
+  }, []);
+
+  /**
+   * Skip to next song
+   */
+  const next = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    setState((prev) => {
+      // Repeat one: restart current
+      if (prev.repeatMode === "one" && prev.current) {
+        audio.currentTime = 0;
+        if (audio.paused) {
+          audio.play().catch((err) => console.error("Playback failed:", err));
+        }
+        return { ...prev, isPlaying: true, progress: 0 };
+      }
+
+      let nextSong: Song | undefined;
+      const newQueue = [...prev.queue];
+      let newHistory = prev.history;
+
+      // Unified next-song logic for queue > 0 or (queue == 0 with repeat-all)
+      if (prev.queue.length > 0 || (prev.repeatMode === "all" && prev.current)) {
+        if (prev.queue.length > 0) {
+          nextSong = newQueue.shift()!;
+        } else {
+          nextSong = prev.current!;
+        }
+
+        if (prev.current) {
+          newHistory = [prev.current, ...newHistory];
+        }
+
+        if (prev.repeatMode === "all" && prev.current) {
+          newQueue.push(prev.current);
+        }
+
+        currentSongIdRef.current = nextSong.id;
+        audio.src = nextSong.sound;
+        audio.load();
+
+        return {
+          ...prev,
+          current: nextSong,
+          queue: newQueue,
+          history: newHistory,
+          isPlaying: true,
+          progress: 0,
+          duration: 0,
+        };
+      }
+
+      // No next song - stop, keep current, reset progress
+      audio.pause();
+      audio.currentTime = 0;
+      return { ...prev, isPlaying: false, progress: 0 };
+    });
+  }, []);
+
+  /**
+   * Go back to previous song
+   */
+  const previous = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    setState((prev) => {
+      // If more than 3 seconds into song, restart it
+      if (audio.currentTime > 3) {
+        audio.currentTime = 0;
         return { ...prev, progress: 0 };
       }
-      const [lastSong, ...rest] = prev.history;
-      if (audio) {
-        audio.src = lastSong.sound;
-        audio.load();
-        audio.play().catch(console.error);
+
+      // No history: restart current song
+      if (prev.history.length === 0) {
+        audio.currentTime = 0;
+        return { ...prev, progress: 0 };
       }
+
+      // Go to previous song in history
+      const [previousSong, ...restHistory] = prev.history;
+      const newQueue = prev.current ? [prev.current, ...prev.queue] : prev.queue;
+
+      currentSongIdRef.current = previousSong.id;
+      audio.src = previousSong.sound;
+      audio.load();
+
       return {
         ...prev,
-        history: rest,
-        queue: prev.current ? [prev.current, ...prev.queue] : prev.queue,
-        current: lastSong,
+        current: previousSong,
+        history: restHistory,
+        queue: newQueue,
         isPlaying: true,
         progress: 0,
+        duration: 0,
       };
     });
   }, []);
 
+  /**
+   * Add song to end of queue
+   */
   const addToQueue = useCallback((song: Song) => {
     setState((prev) => {
+      // Prevent duplicates in queue
       const alreadyInQueue = prev.queue.some((s) => s.id === song.id);
-      if (alreadyInQueue) return prev;
-      return { ...prev, queue: [...prev.queue, song], allSongs: [...prev.allSongs, song] };
+      const isCurrentSong = prev.current?.id === song.id;
+
+      if (alreadyInQueue || isCurrentSong) return prev;
+
+      const newQueue = [...prev.queue, song];
+
+      // If shuffled, add to original queue as well
+      if (prev.isShuffled) {
+        originalQueueRef.current = [...originalQueueRef.current, song];
+      }
+
+      return { ...prev, queue: newQueue };
     });
   }, []);
 
-  const setQueue = useCallback((newQueue: Song[]) => {
-    setState((prev) => ({ ...prev, queue: newQueue, allSongs: newQueue }));
-  }, []);
+  /**
+   * Set entire queue (replaces current queue)
+   */
+  const setQueue = useCallback((songs: Song[], startPlaying: boolean = false) => {
+    const audio = audioRef.current;
 
-  const removeFromQueue = useCallback((songId: number) => {
     setState((prev) => {
-      const isCurrent = prev.current?.id === songId;
-      const newQueue = prev.queue.filter((song) => song.id !== songId);
+      // Reset shuffle state when setting new queue
+      originalQueueRef.current = [];
+
+      if (songs.length === 0) {
+        return {
+          ...prev,
+          queue: [],
+          isShuffled: false,
+        };
+      }
+
+      if (startPlaying && audio) {
+        const [firstSong, ...restQueue] = songs;
+
+        currentSongIdRef.current = firstSong.id;
+        audio.src = firstSong.sound;
+        audio.load();
+
+        return {
+          ...prev,
+          current: firstSong,
+          queue: restQueue,
+          history: [],
+          isPlaying: true,
+          isShuffled: false,
+          progress: 0,
+          duration: 0,
+        };
+      }
+
       return {
         ...prev,
-        queue: newQueue,
-        ...(isCurrent ? { current: null, isPlaying: false, progress: 0 } : {}),
+        queue: songs,
+        isShuffled: false,
       };
     });
   }, []);
 
+  /**
+   * Remove song from queue
+   */
+  const removeFromQueue = useCallback((songId: number) => {
+    setState((prev) => {
+      const newQueue = prev.queue.filter((song) => song.id !== songId);
+
+      // If shuffled, also remove from original queue
+      if (prev.isShuffled) {
+        originalQueueRef.current = originalQueueRef.current.filter((s) => s.id !== songId);
+      }
+
+      return { ...prev, queue: newQueue };
+    });
+  }, []);
+
+  /**
+   * Seek to specific time in current song
+   */
   const seek = useCallback((time: number) => {
-    if (audioRef.current) audioRef.current.currentTime = time;
-    setState((prev) => ({ ...prev, progress: time }));
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const clampedTime = Math.max(0, Math.min(time, audio.duration || 0));
+    audio.currentTime = clampedTime;
+    setState((prev) => ({ ...prev, progress: clampedTime }));
   }, []);
 
+  /**
+   * Set volume (0 to 1)
+   */
   const setVolume = useCallback((vol: number) => {
-    setState((prev) => ({ ...prev, volume: vol }));
+    const clampedVol = Math.max(0, Math.min(1, vol));
+    setState((prev) => ({ ...prev, volume: clampedVol }));
   }, []);
 
+  /**
+   * Toggle shuffle mode
+   */
   const shuffle = useCallback(() => {
     setState((prev) => {
       if (prev.isShuffled) {
-        const remainingIds = new Set(prev.queue.map((s) => s.id));
-        const unShuffled = originalQueueRef.current.filter((s) => remainingIds.has(s.id));
-        return { ...prev, queue: unShuffled, isShuffled: false };
+        // Unshuffle: restore original order
+        const currentQueueIds = new Set(prev.queue.map((s) => s.id));
+        const restoredQueue = originalQueueRef.current.filter((s) => currentQueueIds.has(s.id));
+
+        originalQueueRef.current = [];
+        return { ...prev, queue: restoredQueue, isShuffled: false };
       } else {
+        // Shuffle: randomize queue
+        if (prev.queue.length === 0) return prev;
+
         originalQueueRef.current = [...prev.queue];
-        const shuffled = [...prev.queue].sort(() => Math.random() - 0.5);
-        return { ...prev, queue: shuffled, isShuffled: true };
+
+        // Fisher-Yates shuffle for true randomization
+        const shuffledQueue = [...prev.queue];
+        for (let i = shuffledQueue.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffledQueue[i], shuffledQueue[j]] = [shuffledQueue[j], shuffledQueue[i]];
+        }
+
+        return { ...prev, queue: shuffledQueue, isShuffled: true };
       }
     });
   }, []);
 
+  /**
+   * Cycle through repeat modes: off -> all -> one -> off
+   */
   const repeat = useCallback(() => {
     setState((prev) => {
       const modes: Array<"off" | "all" | "one"> = ["off", "all", "one"];
-      const nextMode = modes[(modes.indexOf(prev.repeatMode) + 1) % modes.length];
+      const currentIndex = modes.indexOf(prev.repeatMode);
+      const nextMode = modes[(currentIndex + 1) % modes.length];
+
       return { ...prev, repeatMode: nextMode };
     });
   }, []);
 
+  /**
+   * Clear entire queue
+   */
+  const clearQueue = useCallback(() => {
+    setState((prev) => ({
+      ...prev,
+      queue: [],
+      isShuffled: false,
+    }));
+    originalQueueRef.current = [];
+  }, []);
+
+  /**
+   * Stop playback and clear everything
+   */
+  const stop = useCallback(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+      audio.src = "";
+    }
+
+    setState((prev) => ({
+      ...prev,
+      current: null,
+      isPlaying: false,
+      progress: 0,
+      duration: 0,
+    }));
+
+    currentSongIdRef.current = null;
+  }, []);
+
   return {
+    // State
     ...state,
+
+    // Actions
     play,
+    togglePlay,
     next,
     previous,
-    togglePlay,
     addToQueue,
+    setQueue,
     removeFromQueue,
+    clearQueue,
     seek,
     setVolume,
     shuffle,
     repeat,
-    setQueue,
+    stop,
   };
 };
