@@ -7,6 +7,7 @@ import { usePlayer } from "./hooks/usePlayer";
 import { useFilteredSongs } from "./hooks/useFilteredSongs";
 
 import { HomePage } from "./components/pages/HomePage";
+import { SettingsPage } from "./components/pages/SettingsPage";
 
 import "./App.css";
 
@@ -110,6 +111,18 @@ function App() {
           repeat={repeat}
           removeFromQueue={removeFromQueue}
           setQueue={setQueue}
+          filteredSongs={filteredSongs}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          isLoading={isLoading}
+          error={error}
+        />
+      ),
+    },
+    {
+      path: "settings",
+      element: (
+        <SettingsPage
           filteredSongs={filteredSongs}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
