@@ -12,7 +12,10 @@ export const RemoveFromQueueBtn: FC<RemoveFromQueueBtnProps> = ({
   removeFromQueue,
 }) => {
   return (
-    <IconButton onClick={() => removeFromQueue(songId)}>
+    <IconButton
+      onClick={() => removeFromQueue(songId)}
+      onPointerDown={(e) => e.stopPropagation()}
+    >
       <DeleteRounded />
     </IconButton>
   );
