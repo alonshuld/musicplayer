@@ -133,12 +133,31 @@ function App() {
       path: "settings",
       element: (
         <SettingsPage
-          songs={songs}
+          showQueue={showQueue}
+          setShowQueue={setShowQueue}
+          current={current}
+          queue={queue}
+          isPlaying={isPlaying}
+          volume={volume}
+          progress={progress}
+          duration={duration}
+          isShuffled={isShuffled}
+          repeatMode={repeatMode}
+          next={next}
+          previous={previous}
+          togglePlay={togglePlay}
+          seek={seek}
+          setVolume={setVolume}
+          shuffle={shuffle}
+          repeat={repeat}
+          removeFromQueue={removeFromQueue}
+          setQueue={setQueue}
           filteredSongs={filteredSongs}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           isLoading={isLoading}
           error={error}
+          songs={songs}
           setSongs={setSongs}
         />
       ),
