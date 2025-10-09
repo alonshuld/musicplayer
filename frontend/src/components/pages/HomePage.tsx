@@ -22,6 +22,7 @@ import { AddToQueueBtn } from "../common/AddToQueueBtn";
 import { ShuffleBtn } from "../common/ShuffleBtn";
 import { RepeatBtn } from "../common/RepeatBtn";
 import { SearchBar } from "../common/SearchBar";
+import { SettingsBtn } from "../common/SettingsBtn";
 
 export interface HomePageProps {
   showQueue: boolean;
@@ -87,7 +88,7 @@ export const HomePage: FC<HomePageProps> = ({
         center={[
           <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />,
         ]}
-        right={[<div key={"TempAdmin"}>admin button</div>]}
+        right={[<SettingsBtn key={"TempAdmin"} />]}
       />
 
       <Box
