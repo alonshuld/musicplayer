@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-const API_URL = "http://localhost:3001";
+const API_URL = "/api";
 
 const fetcher = async (endpoint: string) => {
   const res = await fetch(`${API_URL}/${endpoint}`);
