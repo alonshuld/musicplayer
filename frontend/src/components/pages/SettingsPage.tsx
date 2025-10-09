@@ -14,6 +14,7 @@ import { Error } from "../common/Error";
 import { SearchBar } from "../common/SearchBar";
 import { Footer } from "../common/Footer";
 import { DeleteSongBtn } from "../common/DeleteSongBtn";
+import { HomeBtn } from "../common/HomeBtn";
 
 export interface SettingsPageProps {
   filteredSongs: Song[];
@@ -41,7 +42,7 @@ export const SettingsPage: FC<SettingsPageProps> = ({
         center={[
           <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />,
         ]}
-        right={[<div key={"homeAdminTemp"}>Home button</div>]}
+        right={[<HomeBtn key={"homeAdminTemp"} />]}
       />
 
       <Box
