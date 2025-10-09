@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -8,6 +8,8 @@ import { useFilteredSongs } from "./hooks/useFilteredSongs";
 
 import { HomePage } from "./components/pages/HomePage";
 import { SettingsPage } from "./components/pages/SettingsPage";
+
+import type { Song } from "./types/Song";
 
 import "./App.css";
 
@@ -81,9 +83,17 @@ function App() {
     removeFromQueue,
     setQueue,
   } = usePlayer();
-  const { data: songs, isLoading, error } = useSongs();
+  const { data: songsData, isLoading, error } = useSongs();
+  const [songs, setSongs] = useState<Song[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const filteredSongs = useFilteredSongs(songs, searchTerm);
+
+  // Sync with fetched data
+  useEffect(() => {
+    if (songsData) {
+      setSongs(songsData);
+    }
+  }, [songsData]);
 
   const router = createBrowserRouter([
     {
@@ -123,11 +133,13 @@ function App() {
       path: "settings",
       element: (
         <SettingsPage
+          songs={songs}
           filteredSongs={filteredSongs}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           isLoading={isLoading}
           error={error}
+          setSongs={setSongs}
         />
       ),
     },

@@ -13,6 +13,7 @@ import { SongCover } from "../common/SongCover";
 import { Error } from "../common/Error";
 import { SearchBar } from "../common/SearchBar";
 import { Footer } from "../common/Footer";
+import { DeleteSongBtn } from "../common/DeleteSongBtn";
 
 export interface SettingsPageProps {
   filteredSongs: Song[];
@@ -20,6 +21,8 @@ export interface SettingsPageProps {
   setSearchTerm: (searchTerm: string) => void;
   isLoading: boolean;
   error: Error | null;
+  songs: Song[];
+  setSongs: (songs: Song[]) => void;
 }
 
 export const SettingsPage: FC<SettingsPageProps> = ({
@@ -28,6 +31,8 @@ export const SettingsPage: FC<SettingsPageProps> = ({
   setSearchTerm,
   isLoading,
   error,
+  songs,
+  setSongs,
 }) => {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
@@ -75,7 +80,13 @@ export const SettingsPage: FC<SettingsPageProps> = ({
                 name={song.name}
                 artist={song.artist}
                 cover={song.cover}
-                buttons={[]}
+                buttons={[
+                  <DeleteSongBtn
+                    song={song}
+                    songs={songs}
+                    setSongs={setSongs}
+                  />,
+                ]}
               />
             ))
           )}
