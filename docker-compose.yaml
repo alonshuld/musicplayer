@@ -15,3 +15,4 @@ services:
       - "3001:3001"
     volumes:
       - ./backend/db.json:/app/db.json
+      - ./backend/public:/app/public
