@@ -5,6 +5,7 @@ WORKDIR /app
 RUN npm install -g json-server
 
 COPY db.json .
+
 COPY public ./public
 
 EXPOSE 3001
