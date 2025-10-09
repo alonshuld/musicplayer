@@ -1,0 +1,354 @@
+{
+  "songs": [
+    {
+      "id": 1,
+      "name": "הספר הכחול",
+      "artist": "פאר טסי",
+      "cover": "/api/covers/field_radio_3.png",
+      "sound": "/api/songs/blue_book.mp3"
+    },
+    {
+      "id": 2,
+      "name": "פרופיל 97",
+      "artist": "פאר טסי",
+      "cover": "/api/covers/field_radio_3.png",
+      "sound": "/api/songs/profile_97.mp3"
+    },
+    {
+      "id": 3,
+      "name": "עד העולם הבא",
+      "artist": "פאר טסי",
+      "cover": "/api/covers/field_radio_3.png",
+      "sound": "/api/songs/till_the_next_world.mp3"
+    },
+    {
+      "id": 4,
+      "name": "עוף מוזר",
+      "artist": "פאר טסי",
+      "cover": "/api/covers/field_radio_3.png",
+      "sound": "/api/songs/weird_chicken.mp3"
+    },
+    {
+      "id": 5,
+      "name": "היה טוב",
+      "artist": "עומר אדם",
+      "cover": "/api/covers/symptoms_of_a_breakup.jpg",
+      "sound": "/api/songs/was_good.mp3"
+    },
+    {
+      "id": 6,
+      "name": "רוזה",
+      "artist": "עומר אדם",
+      "cover": "/api/covers/symptoms_of_a_breakup.jpg",
+      "sound": "/api/songs/rose.mp3"
+    },
+    {
+      "id": 7,
+      "name": "השיר שאהבת",
+      "artist": "עומר אדם",
+      "cover": "/api/covers/symptoms_of_a_breakup.jpg",
+      "sound": "/api/songs/the_song_you_liked.mp3"
+    },
+    {
+      "id": 8,
+      "name": "תהום",
+      "artist": "עומר אדם",
+      "cover": "/api/covers/broken_melodies.png",
+      "sound": "/api/songs/abyss.mp3"
+    },
+    {
+      "id": 9,
+      "name": "כסף או דמעות",
+      "artist": "עומר אדם",
+      "cover": "/api/covers/five_nights.jpg",
+      "sound": "/api/songs/money_or_tears.mp3"
+    },
+    {
+      "id": 10,
+      "name": "אקדח",
+      "artist": "עומר אדם",
+      "cover": "/api/covers/five_nights.jpg",
+      "sound": "/api/songs/gun.mp3"
+    },
+    {
+      "id": 11,
+      "name": "לילות וקללות",
+      "artist": "עומר אדם",
+      "cover": "/api/covers/five_nights.jpg",
+      "sound": "/api/songs/nights_and_curses.mp3"
+    },
+    {
+      "id": 12,
+      "name": "רק שלך",
+      "artist": "עומר אדם",
+      "cover": "/api/covers/five_nights.jpg",
+      "sound": "/api/songs/only_yours.mp3"
+    },
+    {
+      "id": 13,
+      "name": "רוז",
+      "artist": "פאר טסי",
+      "cover": "/api/covers/field_radio_2.jpeg",
+      "sound": "/api/songs/roz.mp3"
+    },
+    {
+      "id": 14,
+      "name": "חייזרית",
+      "artist": "פאר טסי",
+      "cover": "/api/covers/field_radio_2.jpeg",
+      "sound": "/api/songs/alienit.mp3"
+    },
+    {
+      "id": 15,
+      "name": "מלודי",
+      "artist": "פאר טסי",
+      "cover": "/api/covers/field_radio_2.jpeg",
+      "sound": "/api/songs/melodey.mp3"
+    },
+    {
+      "id": 16,
+      "name": "נזכרת בי",
+      "artist": "פאר טסי",
+      "cover": "/api/covers/field_radio_2.jpeg",
+      "sound": "/api/songs/remembered_me.mp3"
+    },
+    {
+      "id": 17,
+      "name": "מפת העולם",
+      "artist": "פאר טסי",
+      "cover": "/api/covers/field_radio_2.jpeg",
+      "sound": "/api/songs/world_map.mp3"
+    },
+    {
+      "id": 18,
+      "name": "מה יהיה מחר",
+      "artist": "פאר טסי",
+      "cover": "/api/covers/field_radio_2.jpeg",
+      "sound": "/api/songs/what_will_be_tomorrow.mp3"
+    },
+    {
+      "id": 19,
+      "name": "Something with stuff",
+      "artist": "New Born",
+      "cover": "/api/covers/something_with_stuff.jpeg",
+      "sound": "/api/songs/something_with_stuff.mp3"
+    },
+    {
+      "id": 20,
+      "name": "שלום אהובתי",
+      "artist": "אייל גולן",
+      "cover": "/api/covers/hello_my_love.jpg",
+      "sound": "/api/songs/hello_my_love.mp3"
+    },
+    {
+      "id": 21,
+      "name": "נחלת בינימין",
+      "artist": "איתי לוי",
+      "cover": "/api/covers/nahalat_binyamin.png",
+      "sound": "/api/songs/nahalat_binyamin.mp3"
+    },
+    {
+      "id": 22,
+      "name": "המנון אמ\"ן",
+      "artist": "להקת חיל המודיעין",
+      "cover": "/api/covers/aman.png",
+      "sound": "/api/songs/aman.mp3"
+    },
+    {
+      "id": 23,
+      "name": "קב\"ן",
+      "artist": "בן לולו",
+      "cover": "/api/covers/ben_lulu.jpg",
+      "sound": "/api/songs/kaban.mp3"
+    },
+    {
+      "id": 24,
+      "name": "האזרח הקטן",
+      "artist": "שם טוב האבי",
+      "cover": "/api/covers/good_name_avi.jpeg",
+      "sound": "/api/songs/small_citizen.mp3"
+    },
+    {
+      "id": 25,
+      "name": "Silent Frequency",
+      "artist": "Lyra Skye",
+      "cover": "/api/covers/cover_25.jpg",
+      "sound": "/api/songs/click.wav"
+    },
+    {
+      "id": 26,
+      "name": "Glitch Dream",
+      "artist": "Eira Moon",
+      "cover": "/api/covers/cover_26.jpg",
+      "sound": "/api/songs/chime.wav"
+    },
+    {
+      "id": 27,
+      "name": "Electric Whisper",
+      "artist": "Nova Reed",
+      "cover": "/api/covers/cover_27.jpg",
+      "sound": "/api/songs/click.wav"
+    },
+    {
+      "id": 28,
+      "name": "Waveform Pulse",
+      "artist": "Orion Vega",
+      "cover": "/api/covers/cover_28.jpg",
+      "sound": "/api/songs/chime.wav"
+    },
+    {
+      "id": 29,
+      "name": "Neon Drift",
+      "artist": "Mira Lune",
+      "cover": "/api/covers/cover_29.jpg",
+      "sound": "/api/songs/chime.wav"
+    },
+    {
+      "id": 30,
+      "name": "Crystal Echo",
+      "artist": "Cyra Dawn",
+      "cover": "/api/covers/cover_30.jpg",
+      "sound": "/api/songs/click.wav"
+    },
+    {
+      "id": 31,
+      "name": "Hollow Tone",
+      "artist": "Theo Wilde",
+      "cover": "/api/covers/cover_31.jpg",
+      "sound": "/api/songs/chime.wav"
+    },
+    {
+      "id": 32,
+      "name": "Circuit Bloom",
+      "artist": "Ari Vox",
+      "cover": "/api/covers/cover_32.jpg",
+      "sound": "/api/songs/click.wav"
+    },
+    {
+      "id": 33,
+      "name": "Pixel Dream",
+      "artist": "Juno Rhys",
+      "cover": "/api/covers/cover_33.jpg",
+      "sound": "/api/songs/chime.wav"
+    },
+    {
+      "id": 34,
+      "name": "Mechanical Rain",
+      "artist": "Noa Ash",
+      "cover": "/api/covers/cover_34.jpg",
+      "sound": "/api/songs/chime.wav"
+    },
+    {
+      "id": 35,
+      "name": "Fractal Wave",
+      "artist": "Sera Lynx",
+      "cover": "/api/covers/cover_35.jpg",
+      "sound": "/api/songs/click.wav"
+    },
+    {
+      "id": 36,
+      "name": "Synapse Pulse",
+      "artist": "Atlas Ray",
+      "cover": "/api/covers/cover_36.jpg",
+      "sound": "/api/songs/chime.wav"
+    },
+    {
+      "id": 37,
+      "name": "Data Bloom",
+      "artist": "Vira Lyn",
+      "cover": "/api/covers/cover_37.jpg",
+      "sound": "/api/songs/chime.wav"
+    },
+    {
+      "id": 38,
+      "name": "Echo Pulse",
+      "artist": "Luna Vale",
+      "cover": "/api/covers/cover_38.jpg",
+      "sound": "/api/songs/click.wav"
+    },
+    {
+      "id": 39,
+      "name": "Sonic Thread",
+      "artist": "Kalen Moth",
+      "cover": "/api/covers/cover_39.jpg",
+      "sound": "/api/songs/click.wav"
+    },
+    {
+      "id": 40,
+      "name": "Micro Chime",
+      "artist": "Eli Frost",
+      "cover": "/api/covers/cover_40.jpg",
+      "sound": "/api/songs/chime.wav"
+    },
+    {
+      "id": 41,
+      "name": "Neon Echo",
+      "artist": "Rin Sol",
+      "cover": "/api/covers/cover_41.jpg",
+      "sound": "/api/songs/click.wav"
+    },
+    {
+      "id": 42,
+      "name": "Digital Veins",
+      "artist": "Nova Reed",
+      "cover": "/api/covers/cover_42.jpg",
+      "sound": "/api/songs/chime.wav"
+    },
+    {
+      "id": 43,
+      "name": "Soft Signal",
+      "artist": "Lyra Skye",
+      "cover": "/api/covers/cover_43.jpg",
+      "sound": "/api/songs/chime.wav"
+    },
+    {
+      "id": 44,
+      "name": "Rhythm Loop",
+      "artist": "Orion Vega",
+      "cover": "/api/covers/cover_44.jpg",
+      "sound": "/api/songs/chime.wav"
+    },
+    {
+      "id": 45,
+      "name": "Tone Mirage",
+      "artist": "Caden Frost",
+      "cover": "/api/covers/cover_45.jpg",
+      "sound": "/api/songs/click.wav"
+    },
+    {
+      "id": 46,
+      "name": "Glass Frequency",
+      "artist": "Ari Vox",
+      "cover": "/api/covers/cover_46.jpg",
+      "sound": "/api/songs/chime.wav"
+    },
+    {
+      "id": 47,
+      "name": "Electric Chime",
+      "artist": "Eira Moon",
+      "cover": "/api/covers/cover_47.jpg",
+      "sound": "/api/songs/click.wav"
+    },
+    {
+      "id": 48,
+      "name": "Ambient Drift",
+      "artist": "Vira Lyn",
+      "cover": "/api/covers/cover_48.jpg",
+      "sound": "/api/songs/click.wav"
+    },
+    {
+      "id": 49,
+      "name": "Lofi Circuit",
+      "artist": "Sera Lynx",
+      "cover": "/api/covers/cover_49.jpg",
+      "sound": "/api/songs/chime.wav"
+    },
+    {
+      "id": 50,
+      "name": "Quantum Beat",
+      "artist": "Atlas Ray",
+      "cover": "/api/covers/cover_50.jpg",
+      "sound": "/api/songs/click.wav"
+    }
+  ]
+}
