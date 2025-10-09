@@ -2,6 +2,7 @@ import { type FC } from "react";
 import { Drawer } from "@mui/material";
 
 import { DndContext, closestCorners, type DragEndEvent } from "@dnd-kit/core";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -69,7 +70,11 @@ export const QueueDrawer: FC<QueueDrawerProps> = ({
         },
       }}
     >
-      <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
+      <DndContext
+        collisionDetection={closestCorners}
+        onDragEnd={handleDragEnd}
+        modifiers={[restrictToVerticalAxis]}
+      >
         <SortableContext
           items={queue.map((s) => s.id)}
           strategy={verticalListSortingStrategy}

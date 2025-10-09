@@ -26,31 +26,36 @@ A modern music player built with **Vite**, **React**, **TypeScript**, and **Mate
 ## ⚙️ Installation & Setup
 
 ### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/alonshuld/musicplayer.git
 cd musicplayer
 ```
 
 ### 2. Clone the Repository
+
 ```bash
 npm install
 ```
 
 ### 3. Run the Backend
+
 ```bash
 json-server ./backend/db.json --watch --port 3001
 ```
 
 ### 4. Start the Frontend
+
 ```bash
 npm run dev
 ```
 
-The app will be available at http://localhost:5173.
+The app will be available at <http://localhost:5173>.
 
 ---
 
 ## 📁 Project Structure
+
 ```bash
 musicplayer/
 ├── backend/

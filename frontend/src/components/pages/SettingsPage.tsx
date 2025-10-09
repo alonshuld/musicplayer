@@ -9,22 +9,21 @@ import type { Song } from "../../types/Song";
 // common components
 import { Header } from "../common/Header";
 import { Logo } from "../common/Logo";
-import { Footer } from "../common/Footer";
-import { QueueBtn } from "../common/QueueBtn";
-import { QueueDrawer } from "../common/QueueDrawer";
 import { SongCover } from "../common/SongCover";
 import { Error } from "../common/Error";
-import { PlayBtn } from "../common/PlayBtn";
-import { Volume } from "../common/Volume";
-import { ProgressBar } from "../common/ProgressBar";
+import { SearchBar } from "../common/SearchBar";
+import { Footer } from "../common/Footer";
+import { DeleteSongBtn } from "../common/DeleteSongBtn";
+import { HomeBtn } from "../common/HomeBtn";
+import { QueueBtn } from "../common/QueueBtn";
 import { PlaybackControl } from "../common/PlaybackControl";
-import { AddToQueueBtn } from "../common/AddToQueueBtn";
+import { ProgressBar } from "../common/ProgressBar";
+import { Volume } from "../common/Volume";
 import { ShuffleBtn } from "../common/ShuffleBtn";
 import { RepeatBtn } from "../common/RepeatBtn";
-import { SearchBar } from "../common/SearchBar";
-import { SettingsBtn } from "../common/SettingsBtn";
+import { QueueDrawer } from "../common/QueueDrawer";
 
-export interface HomePageProps {
+export interface SettingsPageProps {
   showQueue: boolean;
   setShowQueue: (showQueue: boolean) => void;
   current: Song | null;
@@ -35,11 +34,9 @@ export interface HomePageProps {
   duration: number;
   isShuffled: boolean;
   repeatMode: "all" | "off" | "one";
-  play: (song: Song) => void;
   next: () => void;
   previous: () => void;
   togglePlay: () => void;
-  addToQueue: (song: Song) => void;
   seek: (time: number) => void;
   setVolume: (vol: number) => void;
   shuffle: () => void;
@@ -51,9 +48,11 @@ export interface HomePageProps {
   setSearchTerm: (searchTerm: string) => void;
   isLoading: boolean;
   error: Error | null;
+  songs: Song[];
+  setSongs: (songs: Song[]) => void;
 }
 
-export const HomePage: FC<HomePageProps> = ({
+export const SettingsPage: FC<SettingsPageProps> = ({
   showQueue,
   setShowQueue,
   current,
@@ -64,11 +63,9 @@ export const HomePage: FC<HomePageProps> = ({
   duration,
   isShuffled,
   repeatMode,
-  play,
   next,
   previous,
   togglePlay,
-  addToQueue,
   seek,
   setVolume,
   shuffle,
@@ -80,6 +77,8 @@ export const HomePage: FC<HomePageProps> = ({
   setSearchTerm,
   isLoading,
   error,
+  songs,
+  setSongs,
 }) => {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
@@ -88,7 +87,7 @@ export const HomePage: FC<HomePageProps> = ({
         center={[
           <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />,
         ]}
-        right={[<SettingsBtn key={"TempAdmin"} />]}
+        right={[<HomeBtn key={"homeAdminTemp"} />]}
       />
 
       <Box
@@ -98,7 +97,7 @@ export const HomePage: FC<HomePageProps> = ({
         sx={{
           display: "flex",
           flexGrow: 1,
-          gap: showQueue ? 1.5 : 0,
+          gap: 0,
           overflow: "hidden",
         }}
       >
@@ -109,7 +108,6 @@ export const HomePage: FC<HomePageProps> = ({
           removeFromQueue={removeFromQueue}
           setQueue={setQueue}
         />
-
         <Box
           className="content"
           gap={2}
@@ -136,11 +134,10 @@ export const HomePage: FC<HomePageProps> = ({
                 artist={song.artist}
                 cover={song.cover}
                 buttons={[
-                  <PlayBtn key="PlayBtn" play={play} song={song} />,
-                  <AddToQueueBtn
-                    key="AddToQueueBtn"
-                    addToQueue={addToQueue}
+                  <DeleteSongBtn
                     song={song}
+                    songs={songs}
+                    setSongs={setSongs}
                   />,
                 ]}
               />
